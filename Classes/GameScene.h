@@ -19,7 +19,7 @@ class GameScene:public CCLayer
 private:
     /* 现实引导文字介绍 */
     void showGuide();
-    
+
 public:
     static CCScene *scene();
     virtual bool init();

@@ -20,29 +20,59 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 package com.giant.whitetile;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
-public class WhiteTile extends Cocos2dxActivity{
-	
-    protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);	
+public class WhiteTile extends Cocos2dxActivity {
+
+	AlertDialog exitDialog;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 
-    public Cocos2dxGLSurfaceView onCreateView() {
-    	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
-    	// WhiteTile should create stencil buffer
-    	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
-    	
-    	return glSurfaceView;
-    }
+	public Cocos2dxGLSurfaceView onCreateView() {
+		Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
+		// WhiteTile should create stencil buffer
+		glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
 
-    static {
-        System.loadLibrary("cocos2dcpp");
-    }     
+		return glSurfaceView;
+	}
+
+	static {
+		System.loadLibrary("cocos2dcpp");
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			exitDialog = new AlertDialog.Builder(this).setTitle("确定")
+					.setMessage("真的要退出游戏吗?")
+					.setPositiveButton("继续玩", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							exitDialog.dismiss();
+						}
+					}).setNegativeButton("退出", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							android.os.Process.killProcess(android.os.Process
+									.myPid());
+						}
+					}).show();
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+
 }

@@ -36,15 +36,15 @@ void GameScene::showGuide()
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
     BaseLayer *guideLayer = BaseLayer::create(GUIDE_LAYER_COLOR, winSize);
     
-    CCLabelTTF *guideTitle = CCLabelTTF::create(GameConfig::guideTitle.c_str(), "Arial", 38);
+    CCLabelTTF *guideTitle = CCLabelTTF::create(GameConfig::guideTitle.c_str(), "Arial", 95);
     guideTitle->setColor(GUIDE_TITLE);
-    guideTitle->setPosition(ccp(VisibleRect::center().x, VisibleRect::top().y-200));
+    guideTitle->setPosition(ccp(VisibleRect::center().x, VisibleRect::center().y+200));
     
-    CCLabelTTF *guideContent = CCLabelTTF::create(GameConfig::guideContent.c_str(), "Arial", 30);
+    CCLabelTTF *guideContent = CCLabelTTF::create(GameConfig::guideContent.c_str(), "Arial", 70);
     guideContent->setColor(GUIDE_CONTENT);
-    guideContent->setDimensions(CCSize(winSize.width,60));
+    guideContent->setDimensions(CCSize(winSize.width,500));
     guideContent->setAnchorPoint(ccp(0.5f, 1.0f));
-    guideContent->setPosition(guideTitle->getPosition()-ccp(0,40));
+    guideContent->setPosition(guideTitle->getPosition()-ccp(0,50));
     
     guideLayer->addChild(guideTitle);
     guideLayer->addChild(guideContent);

@@ -19,3 +19,9 @@
 *.exe
 *.out
 *.app
+
+# Java Compiled Files
+*.class
+proj.android/bin/
+proj.android/obj/
+proj.android/assets/

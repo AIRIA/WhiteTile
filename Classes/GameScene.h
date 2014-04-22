@@ -11,12 +11,14 @@
 
 #include <iostream>
 #include "cocos2d.h"
+#include "BlackTile.h"
 
 using namespace cocos2d;
 
 class GameScene:public CCLayer
 {
 private:
+
     int tileCount;
     int score;
     CCSize m_winSize;
@@ -32,6 +34,7 @@ private:
     void initLayers();
     
 public:
+    void startGame(CCObject *pSender);
     static CCScene *scene();
     virtual void update(float f);
     virtual bool init();

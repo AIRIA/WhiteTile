@@ -25,13 +25,14 @@ bool GameScene::init()
         return false;
     }
     score = 0;
+    GameConfig::blackTiles = CCArray::create();
+    GameConfig::blackTiles->retain();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
     initLayers();
     createTile(layer1,4,4,1,true);
     createTile(layer2);
     createTile(layer3);
     showGuide();
-    scheduleUpdate();
     return true;
 }
 
@@ -83,6 +84,7 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
                 bt->addChild(startLabel);
                 bt->row = i;
                 bt->col = j;
+                bt->setTarget(this, menu_selector(GameScene::startGame));
                 layer->addChild(bt);
             }else if (j==randomPos){
                 BlackTile *bt = BlackTile::create(tileWidth,tileHeight);
@@ -98,6 +100,11 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
         }
     }
     
+}
+
+void GameScene::startGame(cocos2d::CCObject *pSender)
+{
+    scheduleUpdate();
 }
 
 void GameScene::showGuide()
@@ -126,28 +133,52 @@ void GameScene::showGuide()
 
 void GameScene::update(float delta)
 {
-    float scrollY = scrollLayer->getPositionY() - 15;
-    if(abs(scrollY)>=m_winSize.height)
+    int offset = GameConfig::score/10;
+    if(offset>10){
+        offset = 10;
+    }
+    float scrollY = scrollLayer->getPositionY() - 25-offset*2;
+    CCArray *tiles = ((CCLayer*)(scrollLayer->getChildren()->objectAtIndex(0)))->getChildren();
+    CCObject *obj = NULL;
+    CCARRAY_FOREACH(tiles, obj)
     {
-        CCArray *layers = scrollLayer->getChildren();
-        CCLayer *newLayer = CCLayer::create();
-        CCLayer *firstChild = (CCLayer*)layers->objectAtIndex(0);
-        /* 检查是否有未点击的黑快儿 */
-        CCArray *tiles = firstChild->getChildren();
-        CCObject *tile = NULL;
-        CCARRAY_FOREACH(tiles, tile)
+        BlackTile *tile = dynamic_cast<BlackTile*>(obj);
+        if(tile!=NULL&&tile->m_bIsTouched==false)
         {
-            BlackTile *bt = dynamic_cast<BlackTile*>(tile);
-            if(bt&&!bt->m_bIsTouched)
+            CCPoint worldPos = tile->getParent()->convertToWorldSpace(tile->getPosition());
+            if(worldPos.y<=-m_winSize.height/4)
             {
-                CCLog("untouch row:%d,col:%d",bt->row,bt->col);
                 unscheduleUpdate();
-                CCMessageBox("GameOver", "Warn");
+                CCActionInterval *moveTo = CCMoveTo::create(0.2f, ccp(0, -m_winSize.height/4*(tile->row)));
+                scrollLayer->runAction(moveTo);
                 return;
             }
         }
-        
-        
+    }
+    
+//    BlackTile *tile = (BlackTile*)GameConfig::blackTiles->objectAtIndex(0);
+//    CCPoint worldPos = tile->getParent()->convertToWorldSpace(tile->getPosition());
+//    CCLog("worldPos Y:%f",worldPos.y);
+//    if (tile&&tile->m_bIsTouched==false) {
+//        float tileHeight = m_winSize.height/4;
+//        float tileTop = (tile->row+1)*tileHeight;
+//        CCLog("tileTop:%f,parentY:%f",tileTop,scrollLayer->getPositionY());
+//        if(tileTop < abs(scrollLayer->getPositionY()))
+//        {
+//            CCLog("tileTop:%f,parentY:%f",tileTop,scrollLayer->getPositionY());
+//            unscheduleUpdate();
+//            CCActionInterval *moveTo = CCMoveTo::create(0.2f, ccp(0, -m_winSize.height/4*(tile->row)));
+//            scrollLayer->runAction(moveTo);
+//            return;
+//        }
+//    }
+    
+    /* 移动scrolllayer的位置 循环滚动 */
+    if(abs(scrollY)>m_winSize.height)
+    {
+        CCLayer *newLayer = CCLayer::create();
+        CCArray *layers = scrollLayer->getChildren();
+        CCLayer *firstChild = (CCLayer*)layers->objectAtIndex(0);
         scrollLayer->removeChild(firstChild);
         scrollLayer->addChild(newLayer);
         layers = scrollLayer->getChildren();

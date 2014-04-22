@@ -28,7 +28,7 @@ BaseLayer *BaseLayer::create(const ccColor4B &color,const CCSize &size)
 
 void BaseLayer::registerWithTouchDispatcher()
 {
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
 }
 
 bool BaseLayer::_isContainPoint(cocos2d::CCTouch *touch)

@@ -12,12 +12,13 @@
 using namespace cocos2d;
 
 SoundType GameConfig::soundType = kPiano;
-bool GameConfig::guide = true;
+bool GameConfig::guide = false;
 
 std::string GameConfig::guideTitle = "";
 std::string GameConfig::guideContent = "";
 int GameConfig::tileCount = 0;
 int GameConfig::score = 0;
+CCArray *GameConfig::blackTiles = CCArray::create();
 
 void GameConfig::init()
 {

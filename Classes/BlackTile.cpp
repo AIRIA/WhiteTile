@@ -27,8 +27,8 @@ BlackTile *BlackTile::create(float width, float height)
         GameConfig::tileCount++;
         bt->index = GameConfig::tileCount;
         bt->m_bIsTouched = false;
-        CCLog("index:%d",bt->index);
         bt->autorelease();
+        GameConfig::blackTiles->addObject(bt);
         return bt;
     }
     CC_SAFE_DELETE(bt);
@@ -40,9 +40,10 @@ bool BlackTile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
     if(_isContainPoint(pTouch)&&GameConfig::score == (index-1))
     {
+        
         CCSize tileSize = getContentSize();
-        gray = CCLayerColor::create(ccc4(125, 125, 125, 255),tileSize.width,tileSize.height);
-        gray->setScale(0.8f);
+        gray = CCLayerColor::create(ccc4(203, 203, 203, 255),tileSize.width,tileSize.height);
+        gray->setScale(0.7f,0.8f);
         gray->ignoreAnchorPointForPosition(false);
         gray->setPosition(ccp(tileSize.width/2, tileSize.height/2));
         addChild(gray);
@@ -54,10 +55,12 @@ bool BlackTile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
     if(gray!=NULL){
+        BaseLayer::ccTouchEnded(pTouch, pEvent);
         m_bIsTouched = true;
-        CCLog("touch row:%d,col:%d",row,col);
+        CCLog("touch row:%d,col:%d,index:%d",row,col,index);
         GameConfig::score++;
-        CCActionInterval *scaleAction = CCScaleTo::create(0.05f, 1.0f);
+        CCActionInterval *scaleAction = CCScaleTo::create(0.15f, 1.0f);
+       
         gray->runAction(scaleAction);
         setTouchEnabled(false);
     }

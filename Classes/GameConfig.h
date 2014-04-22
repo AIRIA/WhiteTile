@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "cocos2d.h"
+#include "BlackTile.h"
 
 using namespace cocos2d;
 
@@ -44,6 +45,7 @@ public:
     static void save();
     static int tileCount;
     static int score;
+    static CCArray *blackTiles;
     
     /* 选择的类型 */
     static GameType gameType;

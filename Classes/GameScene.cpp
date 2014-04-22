@@ -31,7 +31,7 @@ bool GameScene::init()
     initLayers();
     createTile(layer1,4,4,1,true);
     createTile(layer2);
-    createTile(layer3);
+   // createTile(layer3);
     showGuide();
     return true;
 }
@@ -41,22 +41,24 @@ void GameScene::initLayers()
     scrollLayer = CCLayer::create();
     layer1 = CCLayer::create();
     layer2 = CCLayer::create();
-    layer3 = CCLayer::create();
+   // layer3 = CCLayer::create();
     scrollLayer->setAnchorPoint(CCPointZero);
     layer1->setAnchorPoint(CCPointZero);
     layer2->setAnchorPoint(CCPointZero);
-    layer3->setAnchorPoint(CCPointZero);
+   // layer3->setAnchorPoint(CCPointZero);
     layer1->setPosition(CCPointZero);
     layer2->setPosition(VisibleRect::leftTop());
-    layer3->setPosition(VisibleRect::leftTop()*2);
+//    layer3->setPosition(VisibleRect::leftTop()*2);
     scrollLayer->addChild(layer1);
     scrollLayer->addChild(layer2);
-    scrollLayer->addChild(layer3);
+    //scrollLayer->addChild(layer3);
     addChild(scrollLayer);
 }
 
 void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verticalTiles,int blackTiles,bool isstart)
 {
+    CCSpriteBatchNode *pTileBatch = CCSpriteBatchNode::create("whiteBlock.png");
+    layer->addChild(pTileBatch);
     /* 每个块儿之间保留1像素的间隔 */
     float tileWidth = (m_winSize.width-horizontalTiles-1)/horizontalTiles;
     float tileHeight = (m_winSize.height-verticalTiles)/verticalTiles;
@@ -64,16 +66,14 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
     {
         int randomPos = rand()%horizontalTiles;
         for (int j=0; j<horizontalTiles; j++) {
-            CCLayerColor *tile = CCLayerColor::create(cc4WHITE,tileWidth,tileHeight);
-            tile->ignoreAnchorPointForPosition(false);
+            CCSprite *tile = CCSprite::create("whiteBlock.png");
             tile->setAnchorPoint(CCPointZero);
+            CCSize tileSize = tile->getContentSize();
+            tile->cocos2d::CCNode::setScale(tileWidth/tileSize.width, tileHeight/tileSize.height);
             tile->setPosition(ccp(j*(tileWidth+1),i*(tileHeight+1)));
-            
-            
             if (isstart&&i==0) {
                 /* 生成一排黄色的tile */
-                tile->setColor(ccc3(246,192,85));
-                layer->addChild(tile);
+                pTileBatch->addChild(tile);
             }else if (isstart&&i==1&&j==randomPos){
                 /* 添加开始文字 和触发开始游戏的逻辑 */
                 BlackTile *bt = BlackTile::create(tileWidth,tileHeight);
@@ -94,7 +94,7 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
                 bt->col = j;
                 layer->addChild(bt);
             }else{
-                layer->addChild(tile);
+                pTileBatch->addChild(tile);
             }
             
         }
@@ -137,7 +137,7 @@ void GameScene::update(float delta)
     if(offset>10){
         offset = 10;
     }
-    float scrollY = scrollLayer->getPositionY() - 25-offset*2;
+    float scrollY = scrollLayer->getPositionY() - 28-offset*4;
     CCArray *tiles = ((CCLayer*)(scrollLayer->getChildren()->objectAtIndex(0)))->getChildren();
     CCObject *obj = NULL;
     CCARRAY_FOREACH(tiles, obj)

@@ -60,7 +60,6 @@ void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
         CCLog("touch row:%d,col:%d,index:%d",row,col,index);
         GameConfig::score++;
         CCActionInterval *scaleAction = CCScaleTo::create(0.15f, 1.0f);
-       
         gray->runAction(scaleAction);
         setTouchEnabled(false);
     }

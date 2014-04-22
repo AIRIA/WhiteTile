@@ -16,6 +16,8 @@ bool GameConfig::guide = true;
 
 std::string GameConfig::guideTitle = "";
 std::string GameConfig::guideContent = "";
+int GameConfig::tileCount = 0;
+int GameConfig::score = 0;
 
 void GameConfig::init()
 {

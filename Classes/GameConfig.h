@@ -16,7 +16,9 @@ using namespace cocos2d;
 
 static const ccColor3B GUIDE_TITLE = {255,0,0};
 static const ccColor3B GUIDE_CONTENT = {0,255,0};
-static const ccColor4B GUIDE_LAYER_COLOR = {0,0,0,100};
+static const ccColor4B GUIDE_LAYER_COLOR = {0,0,0,128};
+static const ccColor4B cc4BLACK={0,0,0.255};
+static const ccColor4B cc4WHITE={255,255,255,255};
 
 enum SoundType{
     kClose,
@@ -40,6 +42,8 @@ public:
     
     static void init();
     static void save();
+    static int tileCount;
+    static int score;
     
     /* 选择的类型 */
     static GameType gameType;

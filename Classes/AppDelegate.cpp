@@ -21,7 +21,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
     CCScene *pScene = HomeScene::scene();
     pDirector->runWithScene(pScene);
-
+    srand(time(NULL));
     return true;
 }
 

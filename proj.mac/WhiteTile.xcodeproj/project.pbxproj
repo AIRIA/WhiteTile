@@ -234,6 +234,7 @@
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
 		4130C4CF19050EFE00FEBBA5 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CD19050EFE00FEBBA5 /* GameScene.cpp */; };
 		4130C4D219050FCA00FEBBA5 /* GameConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4D019050FCA00FEBBA5 /* GameConfig.cpp */; };
+		4130C4D8190617F000FEBBA5 /* BlackTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4D6190617F000FEBBA5 /* BlackTile.cpp */; };
 		41BC70E415BF81A5006A0A6C /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70DA15BF81A5006A0A6C /* AppController.mm */; };
 		41BC70E515BF81A5006A0A6C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DC15BF81A5006A0A6C /* InfoPlist.strings */; };
 		41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DE15BF81A5006A0A6C /* MainMenu.xib */; };
@@ -719,6 +720,8 @@
 		4130C4CE19050EFE00FEBBA5 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = ../Classes/GameScene.h; sourceTree = "<group>"; };
 		4130C4D019050FCA00FEBBA5 /* GameConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameConfig.cpp; path = ../Classes/GameConfig.cpp; sourceTree = "<group>"; };
 		4130C4D119050FCA00FEBBA5 /* GameConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConfig.h; path = ../Classes/GameConfig.h; sourceTree = "<group>"; };
+		4130C4D6190617F000FEBBA5 /* BlackTile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BlackTile.cpp; path = ../Classes/BlackTile.cpp; sourceTree = "<group>"; };
+		4130C4D7190617F000FEBBA5 /* BlackTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlackTile.h; path = ../Classes/BlackTile.h; sourceTree = "<group>"; };
 		41BC70D915BF81A5006A0A6C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = SOURCE_ROOT; };
 		41BC70DA15BF81A5006A0A6C /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = SOURCE_ROOT; };
 		41BC70DD15BF81A5006A0A6C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -1670,6 +1673,8 @@
 			children = (
 				4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */,
 				4130C4C61904D91300FEBBA5 /* BaseLayer.h */,
+				4130C4D6190617F000FEBBA5 /* BlackTile.cpp */,
+				4130C4D7190617F000FEBBA5 /* BlackTile.h */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -1830,6 +1835,7 @@
 				4130C4D219050FCA00FEBBA5 /* GameConfig.cpp in Sources */,
 				15C157501683159E00D239F2 /* b2Draw.cpp in Sources */,
 				15C157511683159E00D239F2 /* b2Math.cpp in Sources */,
+				4130C4D8190617F000FEBBA5 /* BlackTile.cpp in Sources */,
 				15C157521683159E00D239F2 /* b2Settings.cpp in Sources */,
 				15C157531683159E00D239F2 /* b2StackAllocator.cpp in Sources */,
 				15C157541683159E00D239F2 /* b2Timer.cpp in Sources */,

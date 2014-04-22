@@ -14,9 +14,6 @@
 #define MENU_FONT_SIZE 100
 #define SUB_MENU_FONT_SIZE 50
 
-static const ccColor4B cc4BLACK={0,0,0.255};
-static const ccColor4B cc4WHITE={255,255,255,255};
-
 CCScene *HomeScene::scene()
 {
     CCScene *homeScene = CCScene::create();

@@ -17,11 +17,23 @@ using namespace cocos2d;
 class GameScene:public CCLayer
 {
 private:
+    int tileCount;
+    int score;
+    CCSize m_winSize;
+    CCLayer *scrollLayer;
+    CCLayer *layer1;
+    CCLayer *layer2;
+    CCLayer *layer3;
     /* 现实引导文字介绍 */
     void showGuide();
-
+    /* 创建层里面的白块儿 */
+    void createTile(CCLayer *layer,int horizontalTiles=4,int verticalTiles=4,int blackTiles=1,bool isstart=false);
+    
+    void initLayers();
+    
 public:
     static CCScene *scene();
+    virtual void update(float f);
     virtual bool init();
     CREATE_FUNC(GameScene);
 };

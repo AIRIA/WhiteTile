@@ -55,15 +55,15 @@ public class WhiteTile extends Cocos2dxActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			exitDialog = new AlertDialog.Builder(this).setTitle("È·¶¨")
-					.setMessage("ÕæµÄÒªÍË³öÓÎÏ·Âğ?")
-					.setPositiveButton("¼ÌĞøÍæ", new OnClickListener() {
+			exitDialog = new AlertDialog.Builder(this).setTitle("æç¤º")
+					.setMessage("çœŸçš„è¦é€€å‡ºæ¸¸æˆå—?")
+					.setPositiveButton("ç»§ç»­ç©", new OnClickListener() {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							exitDialog.dismiss();
 						}
-					}).setNegativeButton("ÍË³ö", new OnClickListener() {
+					}).setNegativeButton("é€€å‡º", new OnClickListener() {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {

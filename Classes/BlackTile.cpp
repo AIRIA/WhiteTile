@@ -80,13 +80,12 @@ void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
         setTouchEnabled(false);
         unscheduleUpdate();
         int offset = GameConfig::score/60;
-        
         if(offset>5){
             offset = 5;
         }
-        GameConfig::speed += offset*1;
+        GameConfig::speed = WT_INIT_SPEED+offset*1;
         CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCORE);
-        if(GameConfig::score%6==0)
+        if(GameConfig::score%4==0)
         {
             CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCROLLER_POS);
         }

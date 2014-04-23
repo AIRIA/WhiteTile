@@ -42,6 +42,8 @@ void GameScene::__updateScrollLayerPosition(cocos2d::CCObject *obj)
     CCLog("createScreen:%d,tileCount:%d",passScreen,GameConfig::tileCount+1);
     CCLayer *appendLayer = CCLayer::create();
     createTile(appendLayer);
+    appendLayer->setTag(passScreen+1);
+    scrollLayer->removeChildByTag(passScreen-2);
     appendLayer->setPosition(VisibleRect::leftTop()*passScreen);
     scrollLayer->addChild(appendLayer);
     

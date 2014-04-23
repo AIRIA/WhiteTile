@@ -23,8 +23,6 @@ private:
     int score;
     CCSize m_winSize;
     CCLayer *scrollLayer;
-    CCLayer *layer1;
-    CCLayer *layer2;
     
     CCLabelTTF *scoreLabel,*scoreLabelShadow;
     /* 现实引导文字介绍 */
@@ -36,8 +34,12 @@ private:
     void __showResult();
     void __backHandler(CCObject *pSender);
     void __retryHandler(CCObject *pSender);
-public:
     void __endGame(CCObject *obj);
+    void __updateScore(CCObject *obj);
+    void __updateScrollLayerPosition(CCObject *obj);
+public:
+    
+    
     void startGame(CCObject *pSender);
     static CCScene *scene();
     virtual void update(float f);

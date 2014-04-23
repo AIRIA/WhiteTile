@@ -18,6 +18,7 @@ std::string GameConfig::guideTitle = "";
 std::string GameConfig::guideContent = "";
 int GameConfig::tileCount = 0;
 int GameConfig::score = 0;
+int GameConfig::speed = WT_INIT_SPEED;
 CCArray *GameConfig::blackTiles = CCArray::create();
 
 void GameConfig::init()

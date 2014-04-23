@@ -79,6 +79,17 @@ void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
         gray->runAction(scaleAction);
         setTouchEnabled(false);
         unscheduleUpdate();
+        int offset = GameConfig::score/60;
+        
+        if(offset>5){
+            offset = 5;
+        }
+        GameConfig::speed += offset*1;
+        CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCORE);
+        if(GameConfig::score%6==0)
+        {
+            CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCROLLER_POS);
+        }
     }
 }
 
@@ -86,7 +97,7 @@ void BlackTile::update(float delta)
 {
     CCPoint worldPos = getParent()->convertToWorldSpace(getPosition());
     if (worldPos.y<=-m_winSize.height/4&&m_bIsTouched==false) {
-        CCNotificationCenter::sharedNotificationCenter()->postNotification("END_GAME");
+        CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_GAME_OVER);
         unscheduleUpdate();
     }
 }

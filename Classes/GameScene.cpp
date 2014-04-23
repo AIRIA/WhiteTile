@@ -23,13 +23,36 @@ CCScene *GameScene::scene()
 void GameScene::onEnter()
 {
     CCLayer::onEnter();
-    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__endGame), "END_GAME", NULL);
+    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__endGame), WT_GAME_OVER, NULL);
+    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__updateScore), WT_UPDATE_SCORE, NULL);
+    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__updateScrollLayerPosition), WT_UPDATE_SCROLLER_POS, NULL);
 }
 
 void GameScene::onExit()
 {
     CCLayer::onExit();
-    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, "END_GAME");
+    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_GAME_OVER);
+    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_UPDATE_SCORE);
+    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_UPDATE_SCROLLER_POS);
+}
+
+void GameScene::__updateScrollLayerPosition(cocos2d::CCObject *obj)
+{
+    int passScreen = (GameConfig::tileCount+1)/4;
+    CCLog("createScreen:%d,tileCount:%d",passScreen,GameConfig::tileCount+1);
+    CCLayer *appendLayer = CCLayer::create();
+    createTile(appendLayer);
+    appendLayer->setPosition(VisibleRect::leftTop()*passScreen);
+    scrollLayer->addChild(appendLayer);
+    
+}
+
+void GameScene::__updateScore(cocos2d::CCObject *obj)
+{
+    char scoreStr[10];
+    sprintf(scoreStr, "%02d",GameConfig::score);
+    scoreLabel->setString(scoreStr);
+    scoreLabelShadow->setString(scoreStr);
 }
 
 void GameScene::__endGame(CCObject *obj)
@@ -39,6 +62,7 @@ void GameScene::__endGame(CCObject *obj)
     __showResult();
     screens = 0;
     GameConfig::score = 0;
+    GameConfig::speed = WT_INIT_SPEED;
     GameConfig::blackTiles->removeAllObjects();
     GameConfig::blackTiles->release();
     GameConfig::tileCount = 0;
@@ -62,8 +86,6 @@ bool GameScene::init()
     GameConfig::blackTiles->retain();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
     initLayers();
-    createTile(layer1,4,4,1,true);
-    createTile(layer2);
     showGuide();
     
     addChild(scoreLabelShadow);
@@ -74,18 +96,28 @@ bool GameScene::init()
 void GameScene::initLayers()
 {
     scrollLayer = CCLayer::create();
+    CCLayer *layer1,*layer2,*layer3;
     layer1 = CCLayer::create();
     layer2 = CCLayer::create();
+    layer3 = CCLayer::create();
     scrollLayer->setAnchorPoint(CCPointZero);
     layer1->setAnchorPoint(CCPointZero);
     layer2->setAnchorPoint(CCPointZero);
+    layer3->setAnchorPoint(CCPointZero);
     layer1->setPosition(CCPointZero);
     layer2->setPosition(VisibleRect::leftTop());
+    layer3->setPosition(VisibleRect::leftTop()*2);
     layer1->setTag(1);
     layer2->setTag(2);
+    layer3->setTag(3);
     scrollLayer->addChild(layer1);
     scrollLayer->addChild(layer2);
+    scrollLayer->addChild(layer3);
     addChild(scrollLayer);
+    createTile(layer1,4,4,1,true);
+    createTile(layer2);
+    createTile(layer3);
+
 }
 
 void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verticalTiles,int blackTiles,bool isstart)
@@ -167,47 +199,7 @@ void GameScene::showGuide()
 
 void GameScene::update(float delta)
 {
-    char scoreStr[10];
-    sprintf(scoreStr, "%02d",GameConfig::score);
-    scoreLabel->setString(scoreStr);
-    scoreLabelShadow->setString(scoreStr);
-    
-    int offset = GameConfig::score/60;
-    
-    if(offset>5){
-        offset = 5;
-    }
-    int speed = 13 + offset*1;
-    float scrollY = scrollLayer->getPositionY() - speed;
-    float passScreens = abs(scrollY)/m_winSize.height;
-    int intScreen = passScreens;
-    if(intScreen>screens&&passScreens>(screens+0.5))
-    {
-        CCLayer *layer = CCLayer::create();
-        screens = intScreen;
-        createTile(layer);
-        layer->setAnchorPoint(CCPointZero);
-        layer->setPosition(VisibleRect::leftTop()*(screens+1));
-        layer->setTag(screens+2);
-        scrollLayer->addChild(layer);
-        scrollLayer->removeChildByTag(screens, true);
-        if(screens%5==0)
-        {
-            scrollY += screens*m_winSize.height;
-            CCArray *layers = scrollLayer->getChildren();
-            CCObject *obj = NULL;
-            int tag = 1;
-            screens = 0;
-            CCARRAY_FOREACH(layers, obj)
-            {
-                layer = (CCLayer*)obj;
-                layer->setTag(tag);
-                layer->setPosition(VisibleRect::leftTop()*(tag-1));
-                tag++;
-            }
-        }
-    }
-    
+    float scrollY = scrollLayer->getPositionY() - GameConfig::speed;
     scrollLayer->setPositionY(scrollY);
 }
 

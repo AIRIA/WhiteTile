@@ -19,6 +19,12 @@ bool BlackTile::init()
     return true;
 }
 
+void BlackTile::onEnter()
+{
+    BaseLayer::onEnter();
+    scheduleUpdate();
+}
+
 BlackTile *BlackTile::create(float width, float height)
 {
     BlackTile *bt = new BlackTile();
@@ -29,6 +35,7 @@ BlackTile *BlackTile::create(float width, float height)
         bt->m_bIsTouched = false;
         bt->autorelease();
         GameConfig::blackTiles->addObject(bt);
+        bt->m_winSize = CCDirector::sharedDirector()->getWinSize();
         return bt;
     }
     CC_SAFE_DELETE(bt);
@@ -71,5 +78,15 @@ void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
         CCActionInterval *scaleAction = CCScaleTo::create(0.15f, 1.0f);
         gray->runAction(scaleAction);
         setTouchEnabled(false);
+        unscheduleUpdate();
+    }
+}
+
+void BlackTile::update(float delta)
+{
+    CCPoint worldPos = getParent()->convertToWorldSpace(getPosition());
+    if (worldPos.y<=-m_winSize.height/4&&m_bIsTouched==false) {
+        CCNotificationCenter::sharedNotificationCenter()->postNotification("END_GAME");
+        unscheduleUpdate();
     }
 }

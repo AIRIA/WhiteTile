@@ -18,12 +18,15 @@ class BlackTile:public BaseLayer
 protected:
     virtual bool _isContainPoint(CCTouch *touch);
 private:
+    CCSize m_winSize;
     CCLayerColor *gray;
 public:
+    virtual void onEnter();
     int row,col;
     int index;
     virtual bool init();
     bool m_bIsTouched;
+    virtual void update(float delta);
     static BlackTile *create(float width,float height);
     virtual bool ccTouchBegan(CCTouch *pTouch,CCEvent *pEvent);
     virtual void ccTouchEnded(CCTouch *pTouch,CCEvent *pEvent);

@@ -34,12 +34,17 @@ private:
     
     void initLayers();
     void __showResult();
+    void __backHandler(CCObject *pSender);
+    void __retryHandler(CCObject *pSender);
 public:
+    void __endGame(CCObject *obj);
     void startGame(CCObject *pSender);
     static CCScene *scene();
     virtual void update(float f);
     virtual bool init();
     CREATE_FUNC(GameScene);
+    virtual void onEnter();
+    virtual void onExit();
 };
 
 #endif /* defined(__WhiteTile__GameScene__) */

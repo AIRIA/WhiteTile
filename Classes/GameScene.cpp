@@ -11,12 +11,37 @@
 #include "GameConfig.h"
 #include "VisibleRect.h"
 #include "BlackTile.h"
+#include "HomeScene.h"
 
 CCScene *GameScene::scene()
 {
     CCScene *scene = CCScene::create();
     scene->addChild(GameScene::create());
     return scene;
+}
+
+void GameScene::onEnter()
+{
+    CCLayer::onEnter();
+    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__endGame), "END_GAME", NULL);
+}
+
+void GameScene::onExit()
+{
+    CCLayer::onExit();
+    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, "END_GAME");
+}
+
+void GameScene::__endGame(CCObject *obj)
+{
+    unscheduleUpdate();
+    removeAllChildren();
+    __showResult();
+    screens = 0;
+    GameConfig::score = 0;
+    GameConfig::blackTiles->removeAllObjects();
+    GameConfig::blackTiles->release();
+    GameConfig::tileCount = 0;
 }
 
 bool GameScene::init()
@@ -154,19 +179,19 @@ void GameScene::update(float delta)
     }
     int speed = 13 + offset*1;
     float scrollY = scrollLayer->getPositionY() - speed;
-    int passScreens = abs(scrollY)/m_winSize.height;
-    if(passScreens>screens)
+    float passScreens = abs(scrollY)/m_winSize.height;
+    int intScreen = passScreens;
+    if(intScreen>screens&&passScreens>(screens+0.5))
     {
         CCLayer *layer = CCLayer::create();
-        CCLog("pass sceens:%d,speed:%d",passScreens,speed);
-        screens = passScreens;
+        screens = intScreen;
         createTile(layer);
         layer->setAnchorPoint(CCPointZero);
         layer->setPosition(VisibleRect::leftTop()*(screens+1));
         layer->setTag(screens+2);
         scrollLayer->addChild(layer);
-        scrollLayer->removeChildByTag(passScreens, true);
-        if(passScreens%5==0)
+        scrollLayer->removeChildByTag(screens, true);
+        if(screens%5==0)
         {
             scrollY += screens*m_winSize.height;
             CCArray *layers = scrollLayer->getChildren();
@@ -188,9 +213,49 @@ void GameScene::update(float delta)
 
 void GameScene::__showResult()
 {
-    CCLayerColor *resultLayer = CCLayerColor::create(ccc4(255, 0, 0, 0),m_winSize.width,m_winSize.height);
-    resultLayer->setColor(ccc3(255, 0, 0));
+    removeChild(scrollLayer);
+    CCLayerColor *resultLayer = CCLayerColor::create(ccc4(227,48,56, 255),m_winSize.width,m_winSize.height);
+    resultLayer->ignoreAnchorPointForPosition(false);
+    resultLayer->setAnchorPoint(CCPointZero);
+    resultLayer->setPosition(CCPointZero);
     addChild(resultLayer);
+    CCLabelTTF *title = CCLabelTTF::create("街机模式", "Arial", 50);
+    title->setColor(ccWHITE);
+    title->setPosition(VisibleRect::top()-ccp(0,150));
+    resultLayer->addChild(title);
+    
+    char scoreStr[20];
+    sprintf(scoreStr, "%d",GameConfig::score);
+    CCLabelTTF *score = CCLabelTTF::create(scoreStr, "fonts/SourceSansPro-Bold.ttf",150);
+    score->setPosition(title->getPosition()-ccp(0, 180));
+    score->setColor(ccBLACK);
+    resultLayer->addChild(score);
+    
+    sprintf(scoreStr, "最佳成绩:%d",GameConfig::score);
+    CCLabelTTF *best = CCLabelTTF::create(scoreStr, "Arial", 30);
+    best->setPosition(score->getPosition()-ccp(0,100));
+    best->setColor(ccBLACK);
+    resultLayer->addChild(best);
+    CCMenuItemFont *share = CCMenuItemFont::create("炫耀",this,NULL);
 
+    CCMenuItemFont *quit = CCMenuItemFont::create("返回", this, menu_selector(GameScene::__backHandler));
+    CCMenuItemFont *retry = CCMenuItemFont::create("重来",this, menu_selector(GameScene::__retryHandler));
+    share->setFontSize(40);
+    quit->setFontSize(40);
+    retry->setFontSize(40);
+    CCMenu *menu = CCMenu::create(share,quit,retry,NULL);
+    menu->setPositionY(200);
+    menu->alignItemsHorizontallyWithPadding(50);
+    resultLayer->addChild(menu);
 }
 
+void GameScene::__backHandler(cocos2d::CCObject *pSender)
+{
+    CCDirector::sharedDirector()->replaceScene(HomeScene::scene());
+}
+
+void GameScene::__retryHandler(cocos2d::CCObject *pSender)
+{
+    removeAllChildren();
+    init();
+}

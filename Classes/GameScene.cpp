@@ -25,13 +25,13 @@ bool GameScene::init()
         return false;
     }
     score = 0;
-    scoreLabel = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 100);
+    scoreLabel = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 50);
     scoreLabel->setColor(ccc3(255, 0, 0));
     scoreLabel->setPosition(VisibleRect::top()-ccp(0,50));
-    scoreLabelShadow = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 100);
+    scoreLabelShadow = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 50);
     scoreLabelShadow->setColor(ccc3(105,53,52));
     scoreLabelShadow->setOpacity(128);
-    scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-6, 56));
+    scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-2, 52));
     
     GameConfig::blackTiles = CCArray::create();
     GameConfig::blackTiles->retain();
@@ -56,6 +56,8 @@ void GameScene::initLayers()
     layer2->setAnchorPoint(CCPointZero);
     layer1->setPosition(CCPointZero);
     layer2->setPosition(VisibleRect::leftTop());
+    layer1->setTag(1);
+    layer2->setTag(2);
     scrollLayer->addChild(layer1);
     scrollLayer->addChild(layer2);
     addChild(scrollLayer);
@@ -66,8 +68,8 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
     CCSpriteBatchNode *pTileBatch = CCSpriteBatchNode::create("whiteBlock.png");
     layer->addChild(pTileBatch);
     /* 每个块儿之间保留1像素的间隔 */
-    float tileWidth = (m_winSize.width-horizontalTiles-1)/horizontalTiles;
-    float tileHeight = (m_winSize.height-verticalTiles)/verticalTiles;
+    float tileWidth = (m_winSize.width-(horizontalTiles-1)/2)/horizontalTiles;
+    float tileHeight = (m_winSize.height-verticalTiles/2)/verticalTiles;
     for(int i=0;i<verticalTiles;i++)
     {
         int randomPos = rand()%horizontalTiles;
@@ -85,7 +87,7 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
                 BlackTile *bt = BlackTile::create(tileWidth,tileHeight);
                 bt->setPosition(ccp(j*(tileWidth+1),i*(tileHeight+1)));
                 bt->setTouchEnabled(true);
-                CCLabelTTF *startLabel = CCLabelTTF::create("开始", "Arial", 100);
+                CCLabelTTF *startLabel = CCLabelTTF::create("开始", "Arial", 40);
                 startLabel->setPosition(ccp(tileWidth/2,tileHeight/2));
                 bt->addChild(startLabel);
                 bt->row = i;
@@ -110,6 +112,7 @@ void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verti
 
 void GameScene::startGame(cocos2d::CCObject *pSender)
 {
+    screens = 0;
     scheduleUpdate();
 }
 
@@ -122,11 +125,11 @@ void GameScene::showGuide()
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
     BaseLayer *guideLayer = BaseLayer::create(GUIDE_LAYER_COLOR, winSize);
     
-    CCLabelTTF *guideTitle = CCLabelTTF::create(GameConfig::guideTitle.c_str(), "Arial", 80);
+    CCLabelTTF *guideTitle = CCLabelTTF::create(GameConfig::guideTitle.c_str(), "Arial", 30);
     guideTitle->setColor(GUIDE_TITLE);
     guideTitle->setPosition(ccp(VisibleRect::center().x, VisibleRect::center().y+200));
     
-    CCLabelTTF *guideContent = CCLabelTTF::create(GameConfig::guideContent.c_str(), "Arial", 60);
+    CCLabelTTF *guideContent = CCLabelTTF::create(GameConfig::guideContent.c_str(), "Arial", 20);
     guideContent->setColor(GUIDE_CONTENT);
     guideContent->setDimensions(CCSize(winSize.width,500));
     guideContent->setAnchorPoint(ccp(0.5f, 1.0f));
@@ -144,56 +147,50 @@ void GameScene::update(float delta)
     scoreLabel->setString(scoreStr);
     scoreLabelShadow->setString(scoreStr);
     
-    int offset = GameConfig::score/30;
-    if(offset>4){
-        offset = 4;
+    int offset = GameConfig::score/60;
+    
+    if(offset>5){
+        offset = 5;
     }
-    float scrollY = scrollLayer->getPositionY() - 20-offset*6;
-    CCArray *tiles = ((CCLayer*)(scrollLayer->getChildren()->objectAtIndex(0)))->getChildren();
-    CCObject *obj = NULL;
-    CCARRAY_FOREACH(tiles, obj)
+    int speed = 13 + offset*1;
+    float scrollY = scrollLayer->getPositionY() - speed;
+    int passScreens = abs(scrollY)/m_winSize.height;
+    if(passScreens>screens)
     {
-        BlackTile *tile = dynamic_cast<BlackTile*>(obj);
-        if(tile!=NULL&&tile->m_bIsTouched==false)
+        CCLayer *layer = CCLayer::create();
+        CCLog("pass sceens:%d,speed:%d",passScreens,speed);
+        screens = passScreens;
+        createTile(layer);
+        layer->setAnchorPoint(CCPointZero);
+        layer->setPosition(VisibleRect::leftTop()*(screens+1));
+        layer->setTag(screens+2);
+        scrollLayer->addChild(layer);
+        scrollLayer->removeChildByTag(passScreens, true);
+        if(passScreens%5==0)
         {
-            CCPoint worldPos = tile->getParent()->convertToWorldSpace(tile->getPosition());
-            if(worldPos.y<=-m_winSize.height/4)
+            scrollY += screens*m_winSize.height;
+            CCArray *layers = scrollLayer->getChildren();
+            CCObject *obj = NULL;
+            int tag = 1;
+            screens = 0;
+            CCARRAY_FOREACH(layers, obj)
             {
-                unscheduleUpdate();
-                CCActionInterval *moveTo = CCMoveTo::create(0.2f, ccp(0, -m_winSize.height/4*(tile->row)));
-                scrollLayer->runAction(moveTo);
-                return;
+                layer = (CCLayer*)obj;
+                layer->setTag(tag);
+                layer->setPosition(VisibleRect::leftTop()*(tag-1));
+                tag++;
             }
         }
     }
     
-    /* 移动scrolllayer的位置 循环滚动 */
-    if(abs(scrollY)>m_winSize.height)
-    {
-        CCLayer *newLayer = CCLayer::create();
-        CCArray *layers = scrollLayer->getChildren();
-        CCLayer *firstChild = (CCLayer*)layers->objectAtIndex(0);
-        scrollLayer->removeChild(firstChild);
-        scrollLayer->addChild(newLayer);
-        layers = scrollLayer->getChildren();
-        CCObject *obj = NULL;
-        int idx = 0;
-        CCARRAY_FOREACH(layers, obj){
-            CCLayer *layer = (CCLayer*)obj;
-            layer->setPosition(VisibleRect::leftTop()*idx);
-            idx++;
-        }
-        createTile(newLayer);
-        scrollY += m_winSize.height;
-    }
     scrollLayer->setPositionY(scrollY);
 }
 
 void GameScene::__showResult()
 {
-    CCLayerColor *resultLayer = CCLayerColor::create();
-//    CCLabelTTF *
-    
+    CCLayerColor *resultLayer = CCLayerColor::create(ccc4(255, 0, 0, 0),m_winSize.width,m_winSize.height);
+    resultLayer->setColor(ccc3(255, 0, 0));
+    addChild(resultLayer);
 
 }
 

@@ -226,6 +226,8 @@
 		379BBAB317F03FDE00829B88 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = 379BBA6D17F03FDE00829B88 /* json_valueiterator.inl */; };
 		379BBAB417F03FDE00829B88 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 379BBA6E17F03FDE00829B88 /* json_writer.cpp */; };
 		379BBAB517F03FDE00829B88 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = 379BBA7017F03FDE00829B88 /* sconscript */; };
+		4101F22419079EC80023F4DB /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 4101F22219079EC80023F4DB /* fonts */; };
+		4101F22519079EC80023F4DB /* whiteBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4101F22319079EC80023F4DB /* whiteBlock.png */; };
 		4130C4C11904D5FD00FEBBA5 /* VisibleRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */; };
 		4130C4C71904D91300FEBBA5 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */; };
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
@@ -704,6 +706,8 @@
 		379BBA7017F03FDE00829B88 /* sconscript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sconscript; sourceTree = "<group>"; };
 		379BBA7117F03FDE00829B88 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
 		379BBA7217F03FDE00829B88 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		4101F22219079EC80023F4DB /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		4101F22319079EC80023F4DB /* whiteBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteBlock.png; sourceTree = "<group>"; };
 		4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleRect.cpp; path = ../Classes/VisibleRect.cpp; sourceTree = "<group>"; };
 		4130C4C01904D5FD00FEBBA5 /* VisibleRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleRect.h; path = ../Classes/VisibleRect.h; sourceTree = "<group>"; };
 		4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseLayer.cpp; path = ../Classes/BaseLayer.cpp; sourceTree = "<group>"; };
@@ -1700,6 +1704,8 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4101F22219079EC80023F4DB /* fonts */,
+				4101F22319079EC80023F4DB /* whiteBlock.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -1793,6 +1799,8 @@
 				15C157DA168315B300D239F2 /* CMakeLists.txt in Resources */,
 				379BBAAF17F03FDE00829B88 /* json_internalarray.inl in Resources */,
 				379BBAB017F03FDE00829B88 /* json_internalmap.inl in Resources */,
+				4101F22419079EC80023F4DB /* fonts in Resources */,
+				4101F22519079EC80023F4DB /* whiteBlock.png in Resources */,
 				379BBAB317F03FDE00829B88 /* json_valueiterator.inl in Resources */,
 				379BBAB517F03FDE00829B88 /* sconscript in Resources */,
 			);

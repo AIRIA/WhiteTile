@@ -11,8 +11,8 @@
 #include "GameConfig.h"
 #include "GameScene.h"
 
-#define MENU_FONT_SIZE 100
-#define SUB_MENU_FONT_SIZE 50
+#define MENU_FONT_SIZE 40
+#define SUB_MENU_FONT_SIZE 20
 
 CCScene *HomeScene::scene()
 {
@@ -56,7 +56,7 @@ BaseLayer *HomeScene::__getMenuLayerItem(const ccColor4B &bgColor,const ccColor3
     baseLayer->ignoreAnchorPointForPosition(false);
     baseLayer->setAnchorPoint(layerAnchor);
     baseLayer->setPosition(layerPos);
-    CCLabelTTF *label = CCLabelTTF::create(labelText, "Arial Black", fontSize);
+    CCLabelTTF *label = CCLabelTTF::create(labelText, "DroidSans-Bold", fontSize);
     label->setColor(textColor);
     label->setPosition(ccp(layerSize.width/2, layerSize.height/2));
     baseLayer->addChild(label);

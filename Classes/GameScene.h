@@ -18,7 +18,7 @@ using namespace cocos2d;
 class GameScene:public CCLayer
 {
 private:
-
+    int screens;
     int tileCount;
     int score;
     CCSize m_winSize;

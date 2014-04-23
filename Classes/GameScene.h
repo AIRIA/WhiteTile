@@ -25,14 +25,15 @@ private:
     CCLayer *scrollLayer;
     CCLayer *layer1;
     CCLayer *layer2;
-    CCLayer *layer3;
+    
+    CCLabelTTF *scoreLabel,*scoreLabelShadow;
     /* 现实引导文字介绍 */
     void showGuide();
     /* 创建层里面的白块儿 */
     void createTile(CCLayer *layer,int horizontalTiles=4,int verticalTiles=4,int blackTiles=1,bool isstart=false);
     
     void initLayers();
-    
+    void __showResult();
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene();

@@ -15,6 +15,8 @@
 
 class BlackTile:public BaseLayer
 {
+protected:
+    virtual bool _isContainPoint(CCTouch *touch);
 private:
     CCLayerColor *gray;
 public:

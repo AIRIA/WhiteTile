@@ -25,14 +25,24 @@ bool GameScene::init()
         return false;
     }
     score = 0;
+    scoreLabel = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 100);
+    scoreLabel->setColor(ccc3(255, 0, 0));
+    scoreLabel->setPosition(VisibleRect::top()-ccp(0,50));
+    scoreLabelShadow = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 100);
+    scoreLabelShadow->setColor(ccc3(105,53,52));
+    scoreLabelShadow->setOpacity(128);
+    scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-6, 56));
+    
     GameConfig::blackTiles = CCArray::create();
     GameConfig::blackTiles->retain();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
     initLayers();
     createTile(layer1,4,4,1,true);
     createTile(layer2);
-   // createTile(layer3);
     showGuide();
+    
+    addChild(scoreLabelShadow);
+    addChild(scoreLabel);
     return true;
 }
 
@@ -41,17 +51,13 @@ void GameScene::initLayers()
     scrollLayer = CCLayer::create();
     layer1 = CCLayer::create();
     layer2 = CCLayer::create();
-   // layer3 = CCLayer::create();
     scrollLayer->setAnchorPoint(CCPointZero);
     layer1->setAnchorPoint(CCPointZero);
     layer2->setAnchorPoint(CCPointZero);
-   // layer3->setAnchorPoint(CCPointZero);
     layer1->setPosition(CCPointZero);
     layer2->setPosition(VisibleRect::leftTop());
-//    layer3->setPosition(VisibleRect::leftTop()*2);
     scrollLayer->addChild(layer1);
     scrollLayer->addChild(layer2);
-    //scrollLayer->addChild(layer3);
     addChild(scrollLayer);
 }
 
@@ -133,11 +139,16 @@ void GameScene::showGuide()
 
 void GameScene::update(float delta)
 {
-    int offset = GameConfig::score/10;
-    if(offset>10){
-        offset = 10;
+    char scoreStr[10];
+    sprintf(scoreStr, "%02d",GameConfig::score);
+    scoreLabel->setString(scoreStr);
+    scoreLabelShadow->setString(scoreStr);
+    
+    int offset = GameConfig::score/30;
+    if(offset>4){
+        offset = 4;
     }
-    float scrollY = scrollLayer->getPositionY() - 28-offset*4;
+    float scrollY = scrollLayer->getPositionY() - 20-offset*6;
     CCArray *tiles = ((CCLayer*)(scrollLayer->getChildren()->objectAtIndex(0)))->getChildren();
     CCObject *obj = NULL;
     CCARRAY_FOREACH(tiles, obj)
@@ -155,23 +166,6 @@ void GameScene::update(float delta)
             }
         }
     }
-    
-//    BlackTile *tile = (BlackTile*)GameConfig::blackTiles->objectAtIndex(0);
-//    CCPoint worldPos = tile->getParent()->convertToWorldSpace(tile->getPosition());
-//    CCLog("worldPos Y:%f",worldPos.y);
-//    if (tile&&tile->m_bIsTouched==false) {
-//        float tileHeight = m_winSize.height/4;
-//        float tileTop = (tile->row+1)*tileHeight;
-//        CCLog("tileTop:%f,parentY:%f",tileTop,scrollLayer->getPositionY());
-//        if(tileTop < abs(scrollLayer->getPositionY()))
-//        {
-//            CCLog("tileTop:%f,parentY:%f",tileTop,scrollLayer->getPositionY());
-//            unscheduleUpdate();
-//            CCActionInterval *moveTo = CCMoveTo::create(0.2f, ccp(0, -m_winSize.height/4*(tile->row)));
-//            scrollLayer->runAction(moveTo);
-//            return;
-//        }
-//    }
     
     /* 移动scrolllayer的位置 循环滚动 */
     if(abs(scrollY)>m_winSize.height)
@@ -193,5 +187,13 @@ void GameScene::update(float delta)
         scrollY += m_winSize.height;
     }
     scrollLayer->setPositionY(scrollY);
+}
+
+void GameScene::__showResult()
+{
+    CCLayerColor *resultLayer = CCLayerColor::create();
+//    CCLabelTTF *
+    
+
 }
 

@@ -35,6 +35,15 @@ BlackTile *BlackTile::create(float width, float height)
     return NULL;
 }
 
+bool BlackTile::_isContainPoint(cocos2d::CCTouch *touch)
+{
+    CCPoint arPoint = getAnchorPointInPoints();
+    CCPoint point = convertTouchToNodeSpaceAR(touch);
+    CCRect rect = boundingBox();
+    CCSize spriteSize = rect.size;
+    CCRect spriteRect = CCRectMake(-arPoint.x,-arPoint.y-spriteSize.height/3,spriteSize.width,spriteSize.height+spriteSize.height/3);
+    return spriteRect.containsPoint(point);
+}
 
 bool BlackTile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {

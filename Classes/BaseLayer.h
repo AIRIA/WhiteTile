@@ -18,7 +18,7 @@ class BaseLayer:public CCLayerColor
 {
 
 protected:
-	bool _isContainPoint(CCTouch *touch);
+	virtual bool _isContainPoint(CCTouch *touch);
 private:
     CCObject *m_pTarget;
     SEL_MenuHandler m_pHandler;

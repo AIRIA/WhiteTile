@@ -7,6 +7,7 @@
 //
 
 #include "Tile.h"
+#include "GameConfig.h"
 
 using namespace WT;
 
@@ -31,4 +32,18 @@ void WT::Tile::onExit()
 {
     BaseSprite::onExit();
     isRendering = false;
+}
+
+bool WT::Tile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+    if(_isContainPoint(pTouch)&&GameConfig::score==(getTag()-1))
+    {
+        CCLog("Touch Began");
+        if(m_pTargetBegan&&beganHandler)
+        {
+            (m_pTargetBegan->*beganHandler)(this);
+        }
+        return true;//swallow other event
+    }
+    return false;
 }

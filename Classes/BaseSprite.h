@@ -19,7 +19,6 @@ class BaseSprite:public CCSprite,public CCTargetedTouchDelegate
 {
 protected:
 	bool _isContainPoint(CCTouch *touch);
-private:
     bool m_bTouchEnable;
     CCObject *m_pTargetBegan;
     SEL_MenuHandler beganHandler;

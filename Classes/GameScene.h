@@ -13,11 +13,14 @@
 #include "cocos2d.h"
 #include "BlackTile.h"
 
+#define WT_TILES_COUNT 30
+
 using namespace cocos2d;
 
 class GameScene:public CCLayer
 {
 private:
+    int activeTiles;
     int screens;
     int tileCount;
     int score;
@@ -41,6 +44,9 @@ private:
     void __endGame(CCObject *obj);
     void __updateScore(CCObject *obj);
     void __updateScrollLayerPosition(CCObject *obj);
+    void __tileTouchDownHandler(CCObject *pSender);
+    void __tileTouchUpHandler(CCObject *pSender);
+    void __whiteTileTouchHandler(CCObject *pSender);
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene();

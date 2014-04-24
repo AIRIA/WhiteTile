@@ -22,6 +22,7 @@ namespace WT{
     public:
         virtual void onEnter();
         virtual void onExit();
+        virtual bool ccTouchBegan(CCTouch *pTouch,CCEvent *pEvent);
         static Tile *create();
     };
 };

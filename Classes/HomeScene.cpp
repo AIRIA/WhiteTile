@@ -68,7 +68,6 @@ BaseLayer *HomeScene::__getMenuLayerItem(const ccColor4B &bgColor,const ccColor3
 
 void HomeScene::__classicHandler(cocos2d::CCObject *pSender)
 {
-    CCLog("Click");
     GameConfig::guideTitle = "不要踩到白块儿哦~";
     GameConfig::guideContent = "点击最下面的黑块儿,不要错过任何的黑块儿哦,没有时间限制,开始吧";
     CCScene *pGameScene = GameScene::scene();

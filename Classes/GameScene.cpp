@@ -11,6 +11,7 @@
 #include "VisibleRect.h"
 #include "HomeScene.h"
 #include "Tile.h"
+#define WT_BLACK_TILE_SCALE 0.8f
 
 using namespace WT;
 
@@ -20,7 +21,6 @@ CCScene *GameScene::scene()
     scene->addChild(GameScene::create());
     return scene;
 }
-
 
 void GameScene::onEnter()
 {
@@ -48,9 +48,8 @@ void GameScene::__updateScrollLayerPosition(cocos2d::CCObject *obj)
     appendLayer->setPosition(VisibleRect::leftTop()*createdScreen);
     GameConfig::scroller->addChild(appendLayer);
     GameConfig::scroller->removeChildByTag(GameConfig::passScreens);
-    
 }
-
+/* 触摸黑块儿的时候 更新得分 */
 void GameScene::__updateScore(cocos2d::CCObject *obj)
 {
     char scoreStr[10];
@@ -58,7 +57,7 @@ void GameScene::__updateScore(cocos2d::CCObject *obj)
     scoreLabel->setString(scoreStr);
     scoreLabelShadow->setString(scoreStr);
 }
-
+/* 游戏结束 移除所有的元素 重置全局变量 */
 void GameScene::__endGame(CCObject *obj)
 {
     unscheduleUpdate();
@@ -72,14 +71,15 @@ void GameScene::__endGame(CCObject *obj)
     GameConfig::tileCount = 0;
     GameConfig::passScreens = 0;
 }
-
+/* 初始化游戏需要的属性 包括黑块儿的大小 */
 bool GameScene::init()
 {
     if (!CCLayer::init()) {
         return false;
     }
-    score = 0;
-    GameConfig::blackTiles = CCArray::create();
+    tileCount = WT_TILES_COUNT;
+    activeTiles = 1;
+    GameConfig::blackTiles = CCArray::createWithCapacity(WT_TILES_COUNT);
     GameConfig::blackTiles->retain();
     tilePools = CCArray::create();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
@@ -103,7 +103,7 @@ bool GameScene::init()
     scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-2, 52));
     addChild(scoreLabelShadow);
     addChild(scoreLabel);
-    createTile(3);
+    createTile(WT_TILES_COUNT);
     return true;
 }
 
@@ -111,18 +111,21 @@ void GameScene::initLayers()
 {
     tileBatchNode = CCSpriteBatchNode::create("whiteBlock.png");
     GameConfig::scroller = CCNode::create();
+    tileBatchNode->setAnchorPoint(CCPointZero);
     GameConfig::scroller->addChild(tileBatchNode);
     addChild(GameConfig::scroller);
 }
 
+/* 根据行数创建指定数量和位置的瓦块儿 */
 void GameScene::createTile(int rows)
 {
+    WT::Tile *tile = NULL;
+    CCObject *obj = NULL;
     /* 从对象池中获取指针 */
     for (int i=0; i<rows; i++) {
         int randomPos = rand()%m_nHorizontalTiles;
+        int row = GameConfig::tileCount;
         for (int j=0; j<m_nVerticalTiles; j++) {
-            WT::Tile *tile = NULL;
-            CCObject *obj = NULL;
             CCARRAY_FOREACH(tilePools, obj)
             {
                 tile = (WT::Tile*)obj;
@@ -131,27 +134,31 @@ void GameScene::createTile(int rows)
                     tile = NULL;
                     continue;
                 }
+                
+                tile->setColor(ccWHITE);
+                tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
                 break;
             }
             if(tile==NULL){
                 tile = WT::Tile::create();
                 tile->isRendering = true;
-                tile->setAnchorPoint(CCPointZero);
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
                 tileBatchNode->addChild(tile);
                 tilePools->addObject(tile);
+                tile->setTargetEnded(this, menu_selector(GameScene::__tileTouchUpHandler));
+                tile->setTargetBegan(this, menu_selector(GameScene::__tileTouchDownHandler));
             }
-            tile->setPosition(ccp(j*(m_fTileWidth+1),i*(m_fTileHeight+1)));
-            tile->setTouchEnabled(false);
-            tile->setOpacity(255);
-            tile->row = i;
+            tile->row = row;
             tile->col = j;
+            tile->setPosition(ccp((j+0.5)*(m_fTileWidth+1),(row+0.5)*(m_fTileHeight+1)));
+            tile->setTouchEnabled(false);
             if (randomPos==j) {
-                tile->setOpacity(0);
-                if(i==0){
-                    tile->setTouchEnabled(true);
-                    tile->setTargetEnded(this, menu_selector(GameScene::startGame));
-                }
+                tile->setColor(ccBLACK);
+                GameConfig::tileCount++;
+                activeTiles++;
+                tile->setTouchEnabled(true);
+                tile->setTag(GameConfig::tileCount);
+                tile->cocos2d::CCNode::setScale(m_fTileScaleX*WT_BLACK_TILE_SCALE, m_fTileScaleY*WT_BLACK_TILE_SCALE);
             }
         }
     }
@@ -241,4 +248,40 @@ void GameScene::__retryHandler(cocos2d::CCObject *pSender)
 {
     removeAllChildren();
     init();
+}
+
+void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
+{
+    WT::Tile *tile = (WT::Tile*)pSender;
+    tile->setColor(ccGRAY);
+}
+
+void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
+{
+    WT::Tile *tile = (WT::Tile*)pSender;
+    tile->setTouchEnabled(false);
+    activeTiles--;
+    tile->runAction(CCScaleTo::create(0.15f, m_fTileScaleX,m_fTileScaleY));
+    char scoreStr[10];
+    sprintf(scoreStr, "%02d",++GameConfig::score);
+    scoreLabel->setString(scoreStr);
+    scoreLabelShadow->setString(scoreStr);
+    /* 判断是不是应该回收资源 */
+    if (activeTiles==10) {
+        int index = tile->getTag();
+        for (int i=0; i<10; i++) {
+            CCLog("remove tag:%d,currentTag:%d",index-(WT_TILES_COUNT-10)+i,index);
+            tileBatchNode->removeChildByTag(index-(WT_TILES_COUNT-10)+i);
+        }
+//        createTile(10);
+    }
+    if(scoreStr)
+    if (tile->row==0) {
+        scheduleUpdate();
+    }
+}
+/* GameOver */
+void GameScene::__whiteTileTouchHandler(cocos2d::CCObject *pSender)
+{
+    
 }

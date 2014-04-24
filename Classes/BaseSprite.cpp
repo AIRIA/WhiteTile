@@ -15,7 +15,7 @@ m_pTargetEnded(NULL),
 m_pTargetMove(NULL),
 m_bTouchEnable(true)
 {
-    //setTouchEnabled(false);
+    
 }
 
 void BaseSprite::onEnter()
@@ -58,11 +58,16 @@ BaseSprite * BaseSprite::create( const char *fileName )
 
 bool BaseSprite::_isContainPoint( CCTouch *touch )
 {
-    CCPoint arPoint = getAnchorPointInPoints();
+    CCSize size = getContentSize();
+    CCPoint anchroePoint = getAnchorPoint();
+    CCPoint arPoint = ccp(size.width*getScaleX()*anchroePoint.x,size.height*getScaleY()*anchroePoint.y);
+    
     CCPoint point = convertTouchToNodeSpaceAR(touch);
+    point = ccp(point.x*getScaleX(),point.y*getScaleY());
+    
     CCRect rect = boundingBox();
     CCSize spriteSize = rect.size;
-    CCRect spriteRect = CCRectMake(-arPoint.x,-arPoint.y,spriteSize.width,spriteSize.height);
+    CCRect spriteRect = CCRectMake(-arPoint.x,-arPoint.y-spriteSize.height/3,spriteSize.width,spriteSize.height+spriteSize.height/3);
     return spriteRect.containsPoint(point);
 }
 

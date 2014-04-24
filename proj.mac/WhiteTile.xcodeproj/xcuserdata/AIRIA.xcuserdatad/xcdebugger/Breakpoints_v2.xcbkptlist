@@ -6,17 +6,63 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/GameScene.cpp"
+            timestampString = "420024766.695562"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "GameScene::createTile(int rows)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../cocos2dx/layers_scenes_transitions_nodes/CCLayer.cpp"
-            timestampString = "419758444.541953"
+            filePath = "../Classes/BaseSprite.cpp"
+            timestampString = "420030238.403626"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "CCLayer::registerWithTouchDispatcher()"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "BaseSprite::_isContainPoint( CCTouch *touch )"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BaseSprite::_isContainPoint(cocos2d::CCTouch*)"
+                  moduleName = "WhiteTile"
+                  urlString = "file:///Users/AIRIA/dev/cocos2dx/cocos2d-x-2.2.1/projects/WhiteTile/Classes/BaseSprite.cpp"
+                  timestampString = "420030452.001537"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "19">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BaseSprite::ccTouchBegan(cocos2d::CCTouch*, cocos2d::CCEvent*)"
+                  moduleName = "WhiteTile"
+                  urlString = "file:///Users/AIRIA/dev/cocos2dx/cocos2d-x-2.2.1/projects/WhiteTile/Classes/BaseSprite.cpp"
+                  timestampString = "420030452.001976"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

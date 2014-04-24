@@ -7,11 +7,12 @@
 //
 
 #include "GameScene.h"
-#include "BaseLayer.h"
 #include "GameConfig.h"
 #include "VisibleRect.h"
-#include "BlackTile.h"
 #include "HomeScene.h"
+#include "Tile.h"
+
+using namespace WT;
 
 CCScene *GameScene::scene()
 {
@@ -19,6 +20,7 @@ CCScene *GameScene::scene()
     scene->addChild(GameScene::create());
     return scene;
 }
+
 
 void GameScene::onEnter()
 {
@@ -38,14 +40,14 @@ void GameScene::onExit()
 
 void GameScene::__updateScrollLayerPosition(cocos2d::CCObject *obj)
 {
-    int passScreen = (GameConfig::tileCount+1)/4;
-    CCLog("createScreen:%d,tileCount:%d",passScreen,GameConfig::tileCount+1);
+    int createdScreen = (GameConfig::tileCount+1)/4;
+    CCLog("createScreen:%d,tileCount:%d",createdScreen,GameConfig::tileCount+1);
     CCLayer *appendLayer = CCLayer::create();
-    createTile(appendLayer);
-    appendLayer->setTag(passScreen+1);
-    scrollLayer->removeChildByTag(passScreen-2);
-    appendLayer->setPosition(VisibleRect::leftTop()*passScreen);
-    scrollLayer->addChild(appendLayer);
+//    createTile(appendLayer);
+    appendLayer->setTag(createdScreen+1);
+    appendLayer->setPosition(VisibleRect::leftTop()*createdScreen);
+    GameConfig::scroller->addChild(appendLayer);
+    GameConfig::scroller->removeChildByTag(GameConfig::passScreens);
     
 }
 
@@ -68,6 +70,7 @@ void GameScene::__endGame(CCObject *obj)
     GameConfig::blackTiles->removeAllObjects();
     GameConfig::blackTiles->release();
     GameConfig::tileCount = 0;
+    GameConfig::passScreens = 0;
 }
 
 bool GameScene::init()
@@ -76,6 +79,21 @@ bool GameScene::init()
         return false;
     }
     score = 0;
+    GameConfig::blackTiles = CCArray::create();
+    GameConfig::blackTiles->retain();
+    tilePools = CCArray::create();
+    m_winSize = CCDirector::sharedDirector()->getWinSize();
+    CCSprite *tmpSprite = CCSprite::create("whiteBlock.png");
+    CCSize tileSize = tmpSprite->getContentSize();
+    /* 初始化tile的宽高 */
+    m_nHorizontalTiles = m_nVerticalTiles = 4;
+    m_fTileWidth = (m_winSize.width-(m_nHorizontalTiles-1)/2)/m_nHorizontalTiles;
+    m_fTileHeight = (m_winSize.height-m_nVerticalTiles/2)/m_nVerticalTiles;
+    m_fTileScaleX = m_fTileWidth/tileSize.width;
+    m_fTileScaleY = m_fTileHeight/tileSize.height;
+    initLayers();
+    showGuide();
+    /* score label */
     scoreLabel = CCLabelTTF::create("00", "fonts/SourceSansPro-Bold.ttf", 50);
     scoreLabel->setColor(ccc3(255, 0, 0));
     scoreLabel->setPosition(VisibleRect::top()-ccp(0,50));
@@ -83,96 +101,67 @@ bool GameScene::init()
     scoreLabelShadow->setColor(ccc3(105,53,52));
     scoreLabelShadow->setOpacity(128);
     scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-2, 52));
-    
-    GameConfig::blackTiles = CCArray::create();
-    GameConfig::blackTiles->retain();
-    m_winSize = CCDirector::sharedDirector()->getWinSize();
-    initLayers();
-    showGuide();
-    
     addChild(scoreLabelShadow);
     addChild(scoreLabel);
+    createTile(3);
     return true;
 }
 
 void GameScene::initLayers()
 {
-    scrollLayer = CCLayer::create();
-    CCLayer *layer1,*layer2,*layer3;
-    layer1 = CCLayer::create();
-    layer2 = CCLayer::create();
-    layer3 = CCLayer::create();
-    scrollLayer->setAnchorPoint(CCPointZero);
-    layer1->setAnchorPoint(CCPointZero);
-    layer2->setAnchorPoint(CCPointZero);
-    layer3->setAnchorPoint(CCPointZero);
-    layer1->setPosition(CCPointZero);
-    layer2->setPosition(VisibleRect::leftTop());
-    layer3->setPosition(VisibleRect::leftTop()*2);
-    layer1->setTag(1);
-    layer2->setTag(2);
-    layer3->setTag(3);
-    scrollLayer->addChild(layer1);
-    scrollLayer->addChild(layer2);
-    scrollLayer->addChild(layer3);
-    addChild(scrollLayer);
-    createTile(layer1,4,4,1,true);
-    createTile(layer2);
-    createTile(layer3);
-
+    tileBatchNode = CCSpriteBatchNode::create("whiteBlock.png");
+    GameConfig::scroller = CCNode::create();
+    GameConfig::scroller->addChild(tileBatchNode);
+    addChild(GameConfig::scroller);
 }
 
-void GameScene::createTile(cocos2d::CCLayer *layer,int horizontalTiles,int verticalTiles,int blackTiles,bool isstart)
+void GameScene::createTile(int rows)
 {
-    CCSpriteBatchNode *pTileBatch = CCSpriteBatchNode::create("whiteBlock.png");
-    layer->addChild(pTileBatch);
-    /* 每个块儿之间保留1像素的间隔 */
-    float tileWidth = (m_winSize.width-(horizontalTiles-1)/2)/horizontalTiles;
-    float tileHeight = (m_winSize.height-verticalTiles/2)/verticalTiles;
-    for(int i=0;i<verticalTiles;i++)
-    {
-        int randomPos = rand()%horizontalTiles;
-        for (int j=0; j<horizontalTiles; j++) {
-            CCSprite *tile = CCSprite::create("whiteBlock.png");
-            tile->setAnchorPoint(CCPointZero);
-            CCSize tileSize = tile->getContentSize();
-            tile->cocos2d::CCNode::setScale(tileWidth/tileSize.width, tileHeight/tileSize.height);
-            tile->setPosition(ccp(j*(tileWidth+1),i*(tileHeight+1)));
-            if (isstart&&i==0) {
-                /* 生成一排黄色的tile */
-                pTileBatch->addChild(tile);
-            }else if (isstart&&i==1&&j==randomPos){
-                /* 添加开始文字 和触发开始游戏的逻辑 */
-                BlackTile *bt = BlackTile::create(tileWidth,tileHeight);
-                bt->setPosition(ccp(j*(tileWidth+1),i*(tileHeight+1)));
-                bt->setTouchEnabled(true);
-                CCLabelTTF *startLabel = CCLabelTTF::create("开始", "Arial", 40);
-                startLabel->setPosition(ccp(tileWidth/2,tileHeight/2));
-                bt->addChild(startLabel);
-                bt->row = i;
-                bt->col = j;
-                bt->setTarget(this, menu_selector(GameScene::startGame));
-                layer->addChild(bt);
-            }else if (j==randomPos){
-                BlackTile *bt = BlackTile::create(tileWidth,tileHeight);
-                bt->setPosition(ccp(j*(tileWidth+1),i*(tileHeight+1)));
-                bt->setTouchEnabled(true);
-                bt->row = i;
-                bt->col = j;
-                layer->addChild(bt);
-            }else{
-                pTileBatch->addChild(tile);
+    /* 从对象池中获取指针 */
+    for (int i=0; i<rows; i++) {
+        int randomPos = rand()%m_nHorizontalTiles;
+        for (int j=0; j<m_nVerticalTiles; j++) {
+            WT::Tile *tile = NULL;
+            CCObject *obj = NULL;
+            CCARRAY_FOREACH(tilePools, obj)
+            {
+                tile = (WT::Tile*)obj;
+                if(tile->isRendering)
+                {
+                    tile = NULL;
+                    continue;
+                }
+                break;
             }
-            
+            if(tile==NULL){
+                tile = WT::Tile::create();
+                tile->isRendering = true;
+                tile->setAnchorPoint(CCPointZero);
+                tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
+                tileBatchNode->addChild(tile);
+                tilePools->addObject(tile);
+            }
+            tile->setPosition(ccp(j*(m_fTileWidth+1),i*(m_fTileHeight+1)));
+            tile->setTouchEnabled(false);
+            tile->setOpacity(255);
+            tile->row = i;
+            tile->col = j;
+            if (randomPos==j) {
+                tile->setOpacity(0);
+                if(i==0){
+                    tile->setTouchEnabled(true);
+                    tile->setTargetEnded(this, menu_selector(GameScene::startGame));
+                }
+            }
         }
     }
-    
 }
 
 void GameScene::startGame(cocos2d::CCObject *pSender)
 {
     screens = 0;
     scheduleUpdate();
+    CCLog("start game");
 }
 
 void GameScene::showGuide()
@@ -201,13 +190,13 @@ void GameScene::showGuide()
 
 void GameScene::update(float delta)
 {
-    float scrollY = scrollLayer->getPositionY() - GameConfig::speed;
-    scrollLayer->setPositionY(scrollY);
+    float scrollY = GameConfig::scroller->getPositionY() - GameConfig::speed;
+    GameConfig::scroller->setPositionY(scrollY);
 }
 
 void GameScene::__showResult()
 {
-    removeChild(scrollLayer);
+    removeChild(GameConfig::scroller);
     CCLayerColor *resultLayer = CCLayerColor::create(ccc4(227,48,56, 255),m_winSize.width,m_winSize.height);
     resultLayer->ignoreAnchorPointForPosition(false);
     resultLayer->setAnchorPoint(CCPointZero);

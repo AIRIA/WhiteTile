@@ -19,6 +19,9 @@ std::string GameConfig::guideContent = "";
 int GameConfig::tileCount = 0;
 int GameConfig::score = 0;
 int GameConfig::speed = WT_INIT_SPEED;
+int GameConfig::passScreens = 0;
+CCNode *GameConfig::scroller = NULL;
+
 CCArray *GameConfig::blackTiles = CCArray::create();
 
 void GameConfig::init()

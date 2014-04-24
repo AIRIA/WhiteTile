@@ -79,16 +79,22 @@ void BlackTile::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
         gray->runAction(scaleAction);
         setTouchEnabled(false);
         unscheduleUpdate();
-        int offset = GameConfig::score/60;
-        if(offset>5){
-            offset = 5;
-        }
-        GameConfig::speed = WT_INIT_SPEED+offset*1;
-        CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCORE);
-        if(GameConfig::score%4==0)
+        /* 更新滚动速度 */
+        if(GameConfig::score%60==0)
         {
+            GameConfig::speed = WT_INIT_SPEED+1;
+            GameConfig::speed = GameConfig::speed>23?23:GameConfig::speed;
+        }
+        CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCORE);
+        /* 判断是不是需要更新tile */
+        float realPassScreen = abs(GameConfig::scroller->getPositionY())/m_winSize.height;
+        int passScreen = realPassScreen;
+        if(passScreen>GameConfig::passScreens&&realPassScreen>=(GameConfig::passScreens+0.5))
+        {
+            GameConfig::passScreens = passScreen;
             CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_UPDATE_SCROLLER_POS);
         }
+
     }
 }
 

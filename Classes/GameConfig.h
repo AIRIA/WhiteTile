@@ -23,8 +23,11 @@ static const ccColor4B cc4WHITE={255,255,255,255};
 
 #define WT_UPDATE_SCORE "update_score"
 #define WT_GAME_OVER "gameover"
+#define WT_STOP_GAME "stop_game"
 #define WT_UPDATE_SCROLLER_POS "update_scroller_position"
-#define WT_INIT_SPEED 12
+#define WT_STOPED_GAME "stoped_game"
+
+#define WT_INIT_SPEED 14
 
 enum SoundType{
     kClose,
@@ -58,6 +61,8 @@ public:
     static std::string guideTitle;
     static std::string guideContent;
     static int speed;
+    static int passScreens;
+    static CCNode *scroller;
     
     
 };

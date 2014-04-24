@@ -228,6 +228,8 @@
 		379BBAB517F03FDE00829B88 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = 379BBA7017F03FDE00829B88 /* sconscript */; };
 		4101F22419079EC80023F4DB /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 4101F22219079EC80023F4DB /* fonts */; };
 		4101F22519079EC80023F4DB /* whiteBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4101F22319079EC80023F4DB /* whiteBlock.png */; };
+		4101F2281908F8A80023F4DB /* BaseSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F2261908F8A80023F4DB /* BaseSprite.cpp */; };
+		4101F22B1908FFA00023F4DB /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F2291908FFA00023F4DB /* Tile.cpp */; };
 		4130C4C11904D5FD00FEBBA5 /* VisibleRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */; };
 		4130C4C71904D91300FEBBA5 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */; };
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
@@ -708,6 +710,10 @@
 		379BBA7217F03FDE00829B88 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
 		4101F22219079EC80023F4DB /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		4101F22319079EC80023F4DB /* whiteBlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteBlock.png; sourceTree = "<group>"; };
+		4101F2261908F8A80023F4DB /* BaseSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseSprite.cpp; path = ../Classes/BaseSprite.cpp; sourceTree = "<group>"; };
+		4101F2271908F8A80023F4DB /* BaseSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseSprite.h; path = ../Classes/BaseSprite.h; sourceTree = "<group>"; };
+		4101F2291908FFA00023F4DB /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = ../Classes/Tile.cpp; sourceTree = "<group>"; };
+		4101F22A1908FFA00023F4DB /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tile.h; path = ../Classes/Tile.h; sourceTree = "<group>"; };
 		4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleRect.cpp; path = ../Classes/VisibleRect.cpp; sourceTree = "<group>"; };
 		4130C4C01904D5FD00FEBBA5 /* VisibleRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleRect.h; path = ../Classes/VisibleRect.h; sourceTree = "<group>"; };
 		4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseLayer.cpp; path = ../Classes/BaseLayer.cpp; sourceTree = "<group>"; };
@@ -1673,6 +1679,10 @@
 				4130C4C61904D91300FEBBA5 /* BaseLayer.h */,
 				4130C4D6190617F000FEBBA5 /* BlackTile.cpp */,
 				4130C4D7190617F000FEBBA5 /* BlackTile.h */,
+				4101F2261908F8A80023F4DB /* BaseSprite.cpp */,
+				4101F2271908F8A80023F4DB /* BaseSprite.h */,
+				4101F2291908FFA00023F4DB /* Tile.cpp */,
+				4101F22A1908FFA00023F4DB /* Tile.h */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -1915,6 +1925,7 @@
 				15C1592C168315E500D239F2 /* CCNodeLoader.cpp in Sources */,
 				15C1592D168315E500D239F2 /* CCNodeLoaderLibrary.cpp in Sources */,
 				15C1592E168315E500D239F2 /* CCParticleSystemQuadLoader.cpp in Sources */,
+				4101F22B1908FFA00023F4DB /* Tile.cpp in Sources */,
 				15C1592F168315E500D239F2 /* CCScale9SpriteLoader.cpp in Sources */,
 				15C15930168315E500D239F2 /* CCScrollViewLoader.cpp in Sources */,
 				15C15931168315E500D239F2 /* CCSpriteLoader.cpp in Sources */,
@@ -2030,6 +2041,7 @@
 				379BBAB117F03FDE00829B88 /* json_reader.cpp in Sources */,
 				379BBAB217F03FDE00829B88 /* json_value.cpp in Sources */,
 				379BBAB417F03FDE00829B88 /* json_writer.cpp in Sources */,
+				4101F2281908F8A80023F4DB /* BaseSprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

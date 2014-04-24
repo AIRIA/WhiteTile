@@ -22,13 +22,17 @@ private:
     int tileCount;
     int score;
     CCSize m_winSize;
-    CCLayer *scrollLayer;
-    
+    CCSpriteBatchNode *tileBatchNode;
     CCLabelTTF *scoreLabel,*scoreLabelShadow;
-    /* 现实引导文字介绍 */
+    float m_fTileWidth,m_fTileHeight;
+    int m_nVerticalTiles,m_nHorizontalTiles;
+    CCArray *tilePools;
+    float m_fTileScaleX,m_fTileScaleY;
+    
+    /* 显示引导文字介绍 */
     void showGuide();
     /* 创建层里面的白块儿 */
-    void createTile(CCLayer *layer,int horizontalTiles=4,int verticalTiles=4,int blackTiles=1,bool isstart=false);
+    void createTile(int rows);
     
     void initLayers();
     void __showResult();
@@ -38,8 +42,6 @@ private:
     void __updateScore(CCObject *obj);
     void __updateScrollLayerPosition(CCObject *obj);
 public:
-    
-    
     void startGame(CCObject *pSender);
     static CCScene *scene();
     virtual void update(float f);

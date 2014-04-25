@@ -23,22 +23,10 @@ WT::Tile *WT::Tile::create()
     return NULL;
 }
 
-void WT::Tile::onEnter()
-{
-    BaseSprite::onEnter();
-}
-
-void WT::Tile::onExit()
-{
-    BaseSprite::onExit();
-    isRendering = false;
-}
-
 bool WT::Tile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
-    if(_isContainPoint(pTouch)&&GameConfig::score==(getTag()-1))
+    if(_isContainPoint(pTouch)&&GameConfig::score==row)
     {
-        CCLog("Touch Began");
         if(m_pTargetBegan&&beganHandler)
         {
             (m_pTargetBegan->*beganHandler)(this);
@@ -47,3 +35,16 @@ bool WT::Tile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
     }
     return false;
 }
+
+void WT::Tile::update(float delta)
+{
+    CCPoint worldPos = getParent()->convertToWorldSpaceAR(getPosition());
+    float tileHeight = getContentSize().height*getScaleY()/0.8f;
+    if((worldPos.y+tileHeight/2)<0){
+        CCLog("tileHeight:%f",tileHeight);
+        unscheduleUpdate();
+        CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_GAME_OVER, this);
+    }
+}
+
+

@@ -12,6 +12,8 @@
 #include "HomeScene.h"
 #include "Tile.h"
 #define WT_BLACK_TILE_SCALE 0.8f
+#define WT_TILES_COUNT 30
+#define WT_TILES_BUFFER 10
 
 using namespace WT;
 
@@ -60,7 +62,13 @@ void GameScene::__updateScore(cocos2d::CCObject *obj)
 /* 游戏结束 移除所有的元素 重置全局变量 */
 void GameScene::__endGame(CCObject *obj)
 {
+    
     unscheduleUpdate();
+    WT::Tile *tile = (WT::Tile*)obj;
+    int row = tile->row;
+    CCAction *rollBack = CCMoveTo::create(0.2f, ccp(0,(-row+1)*(m_fTileHeight+1)));
+    GameConfig::scroller->runAction(rollBack);
+    return;
     removeAllChildren();
     __showResult();
     screens = 0;
@@ -79,9 +87,11 @@ bool GameScene::init()
     }
     tileCount = WT_TILES_COUNT;
     activeTiles = 1;
+    tileTag = 1;
     GameConfig::blackTiles = CCArray::createWithCapacity(WT_TILES_COUNT);
     GameConfig::blackTiles->retain();
-    tilePools = CCArray::create();
+    tilePools = CCArray::createWithCapacity(WT_TILES_COUNT);
+    tilePools->retain();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
     CCSprite *tmpSprite = CCSprite::create("whiteBlock.png");
     CCSize tileSize = tmpSprite->getContentSize();
@@ -134,8 +144,9 @@ void GameScene::createTile(int rows)
                     tile = NULL;
                     continue;
                 }
-                
+                CCLog("缓存池中获取数据");
                 tile->setColor(ccWHITE);
+                tile->isRendering = true;
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
                 break;
             }
@@ -152,12 +163,13 @@ void GameScene::createTile(int rows)
             tile->col = j;
             tile->setPosition(ccp((j+0.5)*(m_fTileWidth+1),(row+0.5)*(m_fTileHeight+1)));
             tile->setTouchEnabled(false);
+            tile->setTag(tileTag++);
             if (randomPos==j) {
                 tile->setColor(ccBLACK);
                 GameConfig::tileCount++;
                 activeTiles++;
+                m_vBlackTags.push_back(tile->getTag());
                 tile->setTouchEnabled(true);
-                tile->setTag(GameConfig::tileCount);
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX*WT_BLACK_TILE_SCALE, m_fTileScaleY*WT_BLACK_TILE_SCALE);
             }
         }
@@ -254,6 +266,10 @@ void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
 {
     WT::Tile *tile = (WT::Tile*)pSender;
     tile->setColor(ccGRAY);
+    tile->unscheduleUpdate();
+    m_vBlackTags.erase(m_vBlackTags.begin());
+    WT::Tile *nextBlackTile = (WT::Tile*)tile->getParent()->getChildByTag(*m_vBlackTags.begin());
+    nextBlackTile->scheduleUpdate();
 }
 
 void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
@@ -267,15 +283,16 @@ void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
     scoreLabel->setString(scoreStr);
     scoreLabelShadow->setString(scoreStr);
     /* 判断是不是应该回收资源 */
-    if (activeTiles==10) {
-        int index = tile->getTag();
-        for (int i=0; i<10; i++) {
-            CCLog("remove tag:%d,currentTag:%d",index-(WT_TILES_COUNT-10)+i,index);
-            tileBatchNode->removeChildByTag(index-(WT_TILES_COUNT-10)+i);
+    if (activeTiles==WT_TILES_BUFFER) {
+        int index = tile->row;
+        WT::Tile *inactiveTile = NULL;
+        for (int i=(index-(WT_TILES_COUNT-WT_TILES_BUFFER))*m_nHorizontalTiles; i<(index-WT_TILES_BUFFER)*m_nHorizontalTiles; i++) {
+            CCLog("remove tag:%d,row:%d",i,index);
+            inactiveTile = (WT::Tile*)tileBatchNode->getChildByTag(i+1);
+            inactiveTile->isRendering = false;
         }
-//        createTile(10);
+        createTile(WT_TILES_BUFFER);
     }
-    if(scoreStr)
     if (tile->row==0) {
         scheduleUpdate();
     }

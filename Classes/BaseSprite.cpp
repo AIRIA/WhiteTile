@@ -29,7 +29,6 @@ void BaseSprite::onEnter()
 
 void BaseSprite::onExit()
 {
-	CCLog("BaseSprite onExit invoke : remove touch delegate");
     CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
     CCSprite::onExit();
 }
@@ -67,7 +66,7 @@ bool BaseSprite::_isContainPoint( CCTouch *touch )
     
     CCRect rect = boundingBox();
     CCSize spriteSize = rect.size;
-    CCRect spriteRect = CCRectMake(-arPoint.x,-arPoint.y-spriteSize.height/3,spriteSize.width,spriteSize.height+spriteSize.height/3);
+    CCRect spriteRect = CCRectMake(-arPoint.x,-arPoint.y-spriteSize.height/2,spriteSize.width,spriteSize.height*1.5);
     return spriteRect.containsPoint(point);
 }
 
@@ -75,7 +74,6 @@ bool BaseSprite::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
     if(_isContainPoint(pTouch))
     {
-        CCLog("Touch Began");
         if(m_pTargetBegan&&beganHandler)
         {
             (m_pTargetBegan->*beganHandler)(this);
@@ -97,7 +95,6 @@ void BaseSprite::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
     if(m_pTargetEnded&&endedHandler)
     {
-        CCLog("BaseSprite Touched Ended");
         (m_pTargetEnded->*endedHandler)(this);
     }
 }

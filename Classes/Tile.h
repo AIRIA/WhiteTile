@@ -20,10 +20,9 @@ namespace WT{
         bool isRendering;
         int row,col;
     public:
-        virtual void onEnter();
-        virtual void onExit();
         virtual bool ccTouchBegan(CCTouch *pTouch,CCEvent *pEvent);
         static Tile *create();
+        virtual void update(float delta);
     };
 };
 

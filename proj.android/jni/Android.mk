@@ -13,7 +13,6 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/VisibleRect.cpp \
                    ../../Classes/GameScene.cpp \
                    ../../Classes/GameConfig.cpp \
-                   ../../Classes/BlackTile.cpp \
                    ../../Classes/BaseSprite.cpp \
                    ../../Classes/Tile.cpp
 

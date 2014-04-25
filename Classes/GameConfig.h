@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include "cocos2d.h"
-#include "BlackTile.h"
 
 using namespace cocos2d;
 
@@ -27,7 +26,7 @@ static const ccColor4B cc4WHITE={255,255,255,255};
 #define WT_UPDATE_SCROLLER_POS "update_scroller_position"
 #define WT_STOPED_GAME "stoped_game"
 
-#define WT_INIT_SPEED 4
+#define WT_INIT_SPEED 12
 
 enum SoundType{
     kClose,
@@ -53,7 +52,6 @@ public:
     static void save();
     static int tileCount;
     static int score;
-    static CCArray *blackTiles;
     
     /* 选择的类型 */
     static GameType gameType;

@@ -41,7 +41,7 @@ void WT::Tile::update(float delta)
     CCPoint worldPos = getParent()->convertToWorldSpaceAR(getPosition());
     float tileHeight = getContentSize().height*getScaleY()/0.8f;
     if((worldPos.y+tileHeight/2)<0){
-        CCLog("tileHeight:%f",tileHeight);
+//        CCLog("tileHeight:%f",tileHeight);
         unscheduleUpdate();
         CCNotificationCenter::sharedNotificationCenter()->postNotification(WT_GAME_OVER, this);
     }

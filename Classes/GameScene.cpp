@@ -12,8 +12,10 @@
 #include "HomeScene.h"
 #include "Tile.h"
 #define WT_BLACK_TILE_SCALE 0.8f
-#define WT_TILES_COUNT 30
+#define WT_TILES_COUNT 200
 #define WT_TILES_BUFFER 10
+#define WT_MAX_SPEED 16
+#define WT_MIN_SPEED 10
 
 using namespace WT;
 
@@ -29,7 +31,6 @@ void GameScene::onEnter()
     CCLayer::onEnter();
     CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__endGame), WT_GAME_OVER, NULL);
     CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__updateScore), WT_UPDATE_SCORE, NULL);
-    CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(GameScene::__updateScrollLayerPosition), WT_UPDATE_SCROLLER_POS, NULL);
 }
 
 void GameScene::onExit()
@@ -37,20 +38,8 @@ void GameScene::onExit()
     CCLayer::onExit();
     CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_GAME_OVER);
     CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_UPDATE_SCORE);
-    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, WT_UPDATE_SCROLLER_POS);
 }
 
-void GameScene::__updateScrollLayerPosition(cocos2d::CCObject *obj)
-{
-    int createdScreen = (GameConfig::tileCount+1)/4;
-    CCLog("createScreen:%d,tileCount:%d",createdScreen,GameConfig::tileCount+1);
-    CCLayer *appendLayer = CCLayer::create();
-//    createTile(appendLayer);
-    appendLayer->setTag(createdScreen+1);
-    appendLayer->setPosition(VisibleRect::leftTop()*createdScreen);
-    GameConfig::scroller->addChild(appendLayer);
-    GameConfig::scroller->removeChildByTag(GameConfig::passScreens);
-}
 /* 触摸黑块儿的时候 更新得分 */
 void GameScene::__updateScore(cocos2d::CCObject *obj)
 {
@@ -62,23 +51,40 @@ void GameScene::__updateScore(cocos2d::CCObject *obj)
 /* 游戏结束 移除所有的元素 重置全局变量 */
 void GameScene::__endGame(CCObject *obj)
 {
-    
     unscheduleUpdate();
     WT::Tile *tile = (WT::Tile*)obj;
     int row = tile->row;
-    CCAction *rollBack = CCMoveTo::create(0.2f, ccp(0,(-row+1)*(m_fTileHeight+1)));
-    GameConfig::scroller->runAction(rollBack);
+    tile->setScaleX(m_fTileScaleX);
+    tile->setScaleY(m_fTileScaleY);
+    CCActionInterval *rollBack = CCMoveTo::create(0.2f, ccp(0,(-row+1)*(m_fTileHeight+1)));
+    CCCallFuncND *rollBackFunc = CCCallFuncND::create(this, callfuncND_selector(GameScene::__rollBackHandler),tile);
+    GameConfig::scroller->runAction(CCSequence::create(rollBack,rollBackFunc,NULL));
     return;
+}
+
+void GameScene::__rollBackHandler(cocos2d::CCObject *pSender,void *param)
+{
+     WT::Tile *tile = (WT::Tile*)param;
+    tile->setColor(ccGRAY);
+    tile->setOpacity(255);
+    CCActionInterval *fadeOut = CCFadeOut::create(0.15f);
+    CCActionInterval *fadeIn = CCFadeOut::create(0.15f);
+    CCActionInterval *fadeSeq = CCSequence::create(fadeOut,fadeIn,NULL);
+    CCActionInterval *blink = CCRepeat::create(fadeSeq, 3);
+    CCActionInstant *blinkHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__blinkHandler));
+    tile->runAction(CCSequence::create(blink,blinkHandler,NULL));
+}
+
+void GameScene::__blinkHandler()
+{
     removeAllChildren();
     __showResult();
-    screens = 0;
     GameConfig::score = 0;
     GameConfig::speed = WT_INIT_SPEED;
-    GameConfig::blackTiles->removeAllObjects();
-    GameConfig::blackTiles->release();
     GameConfig::tileCount = 0;
     GameConfig::passScreens = 0;
 }
+
 /* 初始化游戏需要的属性 包括黑块儿的大小 */
 bool GameScene::init()
 {
@@ -88,8 +94,8 @@ bool GameScene::init()
     tileCount = WT_TILES_COUNT;
     activeTiles = 1;
     tileTag = 1;
-    GameConfig::blackTiles = CCArray::createWithCapacity(WT_TILES_COUNT);
-    GameConfig::blackTiles->retain();
+    GameConfig::speed = WT_MIN_SPEED;
+    m_vBlackTags.clear();
     tilePools = CCArray::createWithCapacity(WT_TILES_COUNT);
     tilePools->retain();
     m_winSize = CCDirector::sharedDirector()->getWinSize();
@@ -144,7 +150,7 @@ void GameScene::createTile(int rows)
                     tile = NULL;
                     continue;
                 }
-                CCLog("缓存池中获取数据");
+//                CCLog("缓存池中获取数据");
                 tile->setColor(ccWHITE);
                 tile->isRendering = true;
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
@@ -178,7 +184,6 @@ void GameScene::createTile(int rows)
 
 void GameScene::startGame(cocos2d::CCObject *pSender)
 {
-    screens = 0;
     scheduleUpdate();
     CCLog("start game");
 }
@@ -282,12 +287,20 @@ void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
     sprintf(scoreStr, "%02d",++GameConfig::score);
     scoreLabel->setString(scoreStr);
     scoreLabelShadow->setString(scoreStr);
+    /* 判断是否需要加速 */
+    if(GameConfig::score%30==0)
+    {
+        GameConfig::speed += 2;
+        if(GameConfig::speed>WT_MAX_SPEED){
+            GameConfig::speed = WT_MAX_SPEED;
+        }
+    }
     /* 判断是不是应该回收资源 */
     if (activeTiles==WT_TILES_BUFFER) {
         int index = tile->row;
         WT::Tile *inactiveTile = NULL;
         for (int i=(index-(WT_TILES_COUNT-WT_TILES_BUFFER))*m_nHorizontalTiles; i<(index-WT_TILES_BUFFER)*m_nHorizontalTiles; i++) {
-            CCLog("remove tag:%d,row:%d",i,index);
+//            CCLog("remove tag:%d,row:%d",i,index);
             inactiveTile = (WT::Tile*)tileBatchNode->getChildByTag(i+1);
             inactiveTile->isRendering = false;
         }

@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include "cocos2d.h"
-#include "BlackTile.h"
 
 
 
@@ -24,9 +23,7 @@ private:
 private:
     int tileTag;
     int activeTiles;
-    int screens;
     int tileCount;
-    int score;
     CCSize m_winSize;
     CCSpriteBatchNode *tileBatchNode;
     CCLabelTTF *scoreLabel,*scoreLabelShadow;
@@ -46,10 +43,11 @@ private:
     void __retryHandler(CCObject *pSender);
     void __endGame(CCObject *obj);
     void __updateScore(CCObject *obj);
-    void __updateScrollLayerPosition(CCObject *obj);
     void __tileTouchDownHandler(CCObject *pSender);
     void __tileTouchUpHandler(CCObject *pSender);
     void __whiteTileTouchHandler(CCObject *pSender);
+    void __rollBackHandler(CCObject *pSender,void *param);
+    void __blinkHandler();
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene();

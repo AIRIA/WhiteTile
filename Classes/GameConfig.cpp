@@ -22,8 +22,6 @@ int GameConfig::speed = WT_INIT_SPEED;
 int GameConfig::passScreens = 0;
 CCNode *GameConfig::scroller = NULL;
 
-CCArray *GameConfig::blackTiles = CCArray::create();
-
 void GameConfig::init()
 {
     CCUserDefault *userDefualt = CCUserDefault::sharedUserDefault();

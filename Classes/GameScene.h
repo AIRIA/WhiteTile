@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "cocos2d.h"
+#include "GameConfig.h"
 
 
 
@@ -19,7 +20,14 @@ using namespace cocos2d;
 class GameScene:public CCLayer
 {
 private:
+    //classic mode proper
+    float m_fClassicTime;
+private:
+    //chan mode proper
+    float m_fChanTime;
+private:
     std::vector<int> m_vBlackTags;
+    GameType gameMode;
 private:
     int tileTag;
     int activeTiles;
@@ -48,9 +56,10 @@ private:
     void __whiteTileTouchHandler(CCObject *pSender);
     void __rollBackHandler(CCObject *pSender,void *param);
     void __blinkHandler();
+    void __timerHandler(float del);
 public:
     void startGame(CCObject *pSender);
-    static CCScene *scene();
+    static CCScene *scene(GameType gameType);
     virtual void update(float f);
     virtual bool init();
     CREATE_FUNC(GameScene);

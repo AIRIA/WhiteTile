@@ -12,17 +12,21 @@
 #include "HomeScene.h"
 #include "Tile.h"
 #define WT_BLACK_TILE_SCALE 0.8f
-#define WT_TILES_COUNT 200
+#define WT_TILES_COUNT 30
 #define WT_TILES_BUFFER 10
 #define WT_MAX_SPEED 16
 #define WT_MIN_SPEED 10
 
 using namespace WT;
 
-CCScene *GameScene::scene()
+CCScene *GameScene::scene(GameType gameType)
 {
     CCScene *scene = CCScene::create();
-    scene->addChild(GameScene::create());
+    GameScene *game = GameScene::create();
+    game->m_fClassicTime = 0.0f;
+    game->m_fChanTime = 30.000f;
+    game->gameMode = gameType;
+    scene->addChild(game);
     return scene;
 }
 
@@ -150,7 +154,6 @@ void GameScene::createTile(int rows)
                     tile = NULL;
                     continue;
                 }
-//                CCLog("缓存池中获取数据");
                 tile->setColor(ccWHITE);
                 tile->isRendering = true;
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
@@ -170,13 +173,20 @@ void GameScene::createTile(int rows)
             tile->setPosition(ccp((j+0.5)*(m_fTileWidth+1),(row+0.5)*(m_fTileHeight+1)));
             tile->setTouchEnabled(false);
             tile->setTag(tileTag++);
-            if (randomPos==j) {
+            if (randomPos==j&&row>0) {
                 tile->setColor(ccBLACK);
                 GameConfig::tileCount++;
                 activeTiles++;
                 m_vBlackTags.push_back(tile->getTag());
                 tile->setTouchEnabled(true);
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX*WT_BLACK_TILE_SCALE, m_fTileScaleY*WT_BLACK_TILE_SCALE);
+            }else if(randomPos==j&&row==0){
+                GameConfig::tileCount++;
+            }
+            if(row==0){
+                tile->setColor(ccYELLOW);
+                tile->setTouchEnabled(false);
+                tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
             }
         }
     }
@@ -271,47 +281,101 @@ void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
 {
     WT::Tile *tile = (WT::Tile*)pSender;
     tile->setColor(ccGRAY);
-    tile->unscheduleUpdate();
-    m_vBlackTags.erase(m_vBlackTags.begin());
-    WT::Tile *nextBlackTile = (WT::Tile*)tile->getParent()->getChildByTag(*m_vBlackTags.begin());
-    nextBlackTile->scheduleUpdate();
+    if(gameMode==kAracade){
+        tile->unscheduleUpdate();
+        m_vBlackTags.erase(m_vBlackTags.begin());
+        WT::Tile *nextBlackTile = (WT::Tile*)tile->getParent()->getChildByTag(*m_vBlackTags.begin());
+        nextBlackTile->scheduleUpdate();
+    }else{
+        CCActionInterval *move = CCMoveBy::create(0.2f, ccp(0,-m_winSize.height/4-0.5));
+        GameConfig::scroller->runAction(move);
+    }
+   
 }
 
 void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
 {
     WT::Tile *tile = (WT::Tile*)pSender;
     tile->setTouchEnabled(false);
-    activeTiles--;
     tile->runAction(CCScaleTo::create(0.15f, m_fTileScaleX,m_fTileScaleY));
-    char scoreStr[10];
-    sprintf(scoreStr, "%02d",++GameConfig::score);
-    scoreLabel->setString(scoreStr);
-    scoreLabelShadow->setString(scoreStr);
-    /* 判断是否需要加速 */
-    if(GameConfig::score%30==0)
+    ++GameConfig::score;
+    if(gameMode==kAracade)
     {
-        GameConfig::speed += 2;
-        if(GameConfig::speed>WT_MAX_SPEED){
-            GameConfig::speed = WT_MAX_SPEED;
+        activeTiles--;
+        char scoreStr[10];
+        sprintf(scoreStr, "%02d",GameConfig::score);
+        scoreLabel->setString(scoreStr);
+        scoreLabelShadow->setString(scoreStr);
+        /* 判断是否需要加速 */
+        if(GameConfig::score%30==0)
+        {
+            GameConfig::speed += 2;
+            if(GameConfig::speed>WT_MAX_SPEED){
+                GameConfig::speed = WT_MAX_SPEED;
+            }
         }
-    }
-    /* 判断是不是应该回收资源 */
-    if (activeTiles==WT_TILES_BUFFER) {
-        int index = tile->row;
-        WT::Tile *inactiveTile = NULL;
-        for (int i=(index-(WT_TILES_COUNT-WT_TILES_BUFFER))*m_nHorizontalTiles; i<(index-WT_TILES_BUFFER)*m_nHorizontalTiles; i++) {
-//            CCLog("remove tag:%d,row:%d",i,index);
-            inactiveTile = (WT::Tile*)tileBatchNode->getChildByTag(i+1);
-            inactiveTile->isRendering = false;
+        /* 判断是不是应该回收资源 */
+        if (activeTiles==WT_TILES_BUFFER) {
+            int index = tile->row;
+            WT::Tile *inactiveTile = NULL;
+            for (int i=(index-(WT_TILES_COUNT-WT_TILES_BUFFER))*m_nHorizontalTiles; i<(index-WT_TILES_BUFFER)*m_nHorizontalTiles; i++) {
+                //            CCLog("remove tag:%d,row:%d",i,index);
+                inactiveTile = (WT::Tile*)tileBatchNode->getChildByTag(i+1);
+                inactiveTile->isRendering = false;
+            }
+            createTile(WT_TILES_BUFFER);
         }
-        createTile(WT_TILES_BUFFER);
+
     }
-    if (tile->row==0) {
-        scheduleUpdate();
+    if (tile->row==1) {
+        switch (gameMode) {
+            case kClassic:
+                schedule(schedule_selector(GameScene::__timerHandler));
+                if (GameConfig::score==50) {
+                    unschedule(schedule_selector(GameScene::__timerHandler));
+                }
+                break;
+            case kAracade:
+                scheduleUpdate();
+                break;
+            case kChan:
+                schedule(schedule_selector(GameScene::__timerHandler));
+                break;
+            default:
+                break;
+        }
+        
     }
 }
 /* GameOver */
 void GameScene::__whiteTileTouchHandler(cocos2d::CCObject *pSender)
 {
+    
+}
+
+/*-------------------------------------------------------------------------------------*/
+
+void GameScene::__timerHandler(float del)
+{
+    char timeStr[10];
+    switch (gameMode) {
+        case kClassic:
+            m_fClassicTime += del;
+            sprintf(timeStr, "%1.3f\"",m_fClassicTime);
+            break;
+        case kChan:
+            m_fChanTime -= del;
+            if (m_fChanTime<=0) {
+                m_fChanTime = 0.000f;
+                unschedule(schedule_selector(GameScene::__timerHandler));
+            }
+            sprintf(timeStr, "%1.3f\"",m_fChanTime);
+            
+            break;
+        default:
+            break;
+    }
+    scoreLabel->setString(timeStr);
+    scoreLabelShadow->setString(timeStr);
     
 }

@@ -25,7 +25,7 @@ WT::Tile *WT::Tile::create()
 
 bool WT::Tile::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
-    if(_isContainPoint(pTouch)&&GameConfig::score==row)
+    if(_isContainPoint(pTouch)&&GameConfig::score==row-1)
     {
         if(m_pTargetBegan&&beganHandler)
         {

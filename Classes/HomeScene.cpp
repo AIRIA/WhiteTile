@@ -31,10 +31,10 @@ bool HomeScene::init()
     leftTop->setTarget(this, menu_selector(HomeScene::__classicHandler));
     
     BaseLayer *rightTop = __getMenuLayerItem(cc4BLACK, ccWHITE, CCSize(winSize.width/2,winSize.height/2), ccp(1.0f, 1.0f), VisibleRect::rightTop(), "街机", MENU_FONT_SIZE);
-    rightTop->setTarget(this, NULL);
+    rightTop->setTarget(this, menu_selector(HomeScene::__arcadeHandler));
     
     BaseLayer *leftBottom = __getMenuLayerItem(cc4BLACK, ccWHITE, CCSize(winSize.width/2,winSize.height/2), CCPointZero, CCPointZero, "禅", MENU_FONT_SIZE);
-    leftBottom->setTarget(this, NULL);
+    leftBottom->setTarget(this, menu_selector(HomeScene::__chanHandler));
     
     BaseLayer *soundSetting = __getMenuLayerItem(cc4WHITE, ccBLACK, CCSize(winSize.width/2,winSize.height/10), ccp(0.0f, 1.0f), VisibleRect::center(), "音效:默认", SUB_MENU_FONT_SIZE);
     soundSetting->setTarget(this, NULL);
@@ -69,7 +69,21 @@ BaseLayer *HomeScene::__getMenuLayerItem(const ccColor4B &bgColor,const ccColor3
 void HomeScene::__classicHandler(cocos2d::CCObject *pSender)
 {
     GameConfig::guideTitle = "不要踩到白块儿哦~";
+    GameConfig::guideContent = "点击最下面的黑块儿,越快到达终点越棒哦.";
+    CCScene *pGameScene = GameScene::scene(kClassic);
+    CCDirector::sharedDirector()->replaceScene(pGameScene);
+}
+void HomeScene::__arcadeHandler(cocos2d::CCObject *pSender)
+{
+    GameConfig::guideTitle = "不要踩到白块儿哦~";
     GameConfig::guideContent = "点击最下面的黑块儿,不要错过任何的黑块儿哦,没有时间限制,开始吧";
-    CCScene *pGameScene = GameScene::scene();
+    CCScene *pGameScene = GameScene::scene(kAracade);
+    CCDirector::sharedDirector()->replaceScene(pGameScene);
+}
+void HomeScene::__chanHandler(cocos2d::CCObject *pSender)
+{
+    GameConfig::guideTitle = "不要踩到白块儿哦~";
+    GameConfig::guideContent = "点击最下面的黑块儿,30秒内看你能点击多少个黑色块儿.";
+    CCScene *pGameScene = GameScene::scene(kChan);
     CCDirector::sharedDirector()->replaceScene(pGameScene);
 }

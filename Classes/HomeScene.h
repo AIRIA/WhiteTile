@@ -21,6 +21,8 @@ private:
     BaseLayer *__getMenuLayerItem(const ccColor4B &bgColor,const ccColor3B &textColor,const CCSize &layerSize,const CCPoint &layerAnchor,const CCPoint &layerPos,const char *labelText,float fontSize);
     
     void __classicHandler(CCObject *pSender);
+    void __chanHandler(CCObject *pSender);
+    void __arcadeHandler(CCObject *pSender);
     
 public:
     static CCScene *scene();

@@ -29,6 +29,11 @@ private:
     std::vector<int> m_vBlackTags;
     GameType gameMode;
 private:
+    std::string resultTitle;
+    std::string currentScore;
+    std::string topScore;
+    
+    
     int tileTag;
     int activeTiles;
     int tileCount;
@@ -57,6 +62,7 @@ private:
     void __rollBackHandler(CCObject *pSender,void *param);
     void __blinkHandler();
     void __timerHandler(float del);
+    void __initSelectMode();
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene(GameType gameType);

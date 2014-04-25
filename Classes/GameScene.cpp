@@ -22,15 +22,15 @@ using namespace WT;
 CCScene *GameScene::scene(GameType gameType)
 {
     CCScene *scene = CCScene::create();
+    GameConfig::gameType = gameType;
     GameScene *game = GameScene::create();
-    game->gameMode = gameType;
-    game->__initSelectMode();
     scene->addChild(game);
     return scene;
 }
 
 void GameScene::__initSelectMode()
 {
+    gameMode = GameConfig::gameType;
     m_fClassicTime = 0.0f;
     m_fChanTime = 30.000f;
     switch (gameMode) {
@@ -131,6 +131,7 @@ bool GameScene::init()
     m_winSize = CCDirector::sharedDirector()->getWinSize();
     CCSprite *tmpSprite = CCSprite::create("whiteBlock.png");
     CCSize tileSize = tmpSprite->getContentSize();
+    
     /* 初始化tile的宽高 */
     m_nHorizontalTiles = m_nVerticalTiles = 4;
     m_fTileWidth = (m_winSize.width-(m_nHorizontalTiles-1)/2)/m_nHorizontalTiles;
@@ -149,14 +150,26 @@ bool GameScene::init()
     scoreLabelShadow->setPosition(VisibleRect::top()-ccp(-2, 52));
     addChild(scoreLabelShadow);
     addChild(scoreLabel);
+    __initSelectMode();
     if(gameMode==kClassic)
     {
         createTile(50);
+        __createGreenResultLayer(); 
     }else{
         createTile(WT_TILES_COUNT);
     }
-    __initSelectMode();
+    
     return true;
+}
+
+void GameScene::__createGreenResultLayer()
+{
+    CCLayerColor *resultLayer = CCLayerColor::create(ccc4(73,178,87, 255),m_winSize.width,m_winSize.height);
+    resultLayer->ignoreAnchorPointForPosition(false);
+    resultLayer->setAnchorPoint(CCPointZero);
+//    resultLayer->setPosition(CCPointZero);
+    resultLayer->setPosition(ccp(0.0,m_winSize.height/4*GameConfig::tileCount));
+    GameConfig::scroller->addChild(resultLayer);
 }
 
 void GameScene::initLayers()
@@ -327,12 +340,20 @@ void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
     nextBlackTile->scheduleUpdate();
     nextBlackTile->setTouchEnabled(true);
 
-    if(gameMode!=kAracade){
+    if(gameMode!=kAracade)
+    {
+        CCActionInterval *move = NULL;
+        if (gameMode==kClassic&&GameConfig::score==GameConfig::tileCount-1) {
+            move = CCMoveBy::create(0.1f, ccp(0,-m_winSize.height/4-0.5));
+        }else{
+            move = CCMoveBy::create(0.1f, ccp(0,(-m_winSize.height/4-0.5)*2));
+        }
+        GameConfig::scroller->runAction(move);
+    }
+    if (gameMode==kClassic&&GameConfig::score==GameConfig::tileCount) {
         CCActionInterval *move = CCMoveBy::create(0.1f, ccp(0,-m_winSize.height/4-0.5));
         GameConfig::scroller->runAction(move);
-        
     }
-   
 }
 
 void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)

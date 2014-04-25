@@ -63,6 +63,7 @@ private:
     void __blinkHandler();
     void __timerHandler(float del);
     void __initSelectMode();
+    void __createGreenResultLayer();
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene(GameType gameType);
@@ -71,6 +72,7 @@ public:
     CREATE_FUNC(GameScene);
     virtual void onEnter();
     virtual void onExit();
+    
 };
 
 #endif /* defined(__WhiteTile__GameScene__) */

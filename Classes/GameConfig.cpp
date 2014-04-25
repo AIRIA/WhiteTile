@@ -12,6 +12,7 @@
 using namespace cocos2d;
 
 SoundType GameConfig::soundType = kPiano;
+GameType GameConfig::gameType = kClassic;
 bool GameConfig::guide = false;
 
 std::string GameConfig::guideTitle = "";

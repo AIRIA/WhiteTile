@@ -17,8 +17,8 @@
 #define WT_BLACK_TILE_SCALE 0.8f
 #define WT_TILES_COUNT 30
 #define WT_TILES_BUFFER 10
-#define WT_MAX_SPEED 16
-#define WT_MIN_SPEED 10
+#define WT_MAX_SPEED 20
+#define WT_MIN_SPEED 14
 
 using namespace WT;
 using namespace cocos2d::extension;

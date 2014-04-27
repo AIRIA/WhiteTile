@@ -26,7 +26,7 @@ static const ccColor4B cc4WHITE={255,255,255,255};
 #define WT_UPDATE_SCROLLER_POS "update_scroller_position"
 #define WT_STOPED_GAME "stoped_game"
 
-#define WT_INIT_SPEED 12
+#define WT_INIT_SPEED 14
 
 enum SoundType{
     kClose,

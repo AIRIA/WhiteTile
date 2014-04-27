@@ -242,6 +242,12 @@
 		41BC70E815BF81A5006A0A6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70E115BF81A5006A0A6C /* main.m */; };
 		8C583FAD169DB6D500F63A10 /* CCEditBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C583FA8169DB6D500F63A10 /* CCEditBox.cpp */; };
 		8C583FAE169DB6D500F63A10 /* CCEditBoxImplMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C583FAC169DB6D500F63A10 /* CCEditBoxImplMac.mm */; };
+		8EFDF8A1190CDA7600302415 /* beep.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89A190CDA7600302415 /* beep.m4a */; };
+		8EFDF8A2190CDA7600302415 /* cheer.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89B190CDA7600302415 /* cheer.m4a */; };
+		8EFDF8A3190CDA7600302415 /* error.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89C190CDA7600302415 /* error.m4a */; };
+		8EFDF8A5190CDA7600302415 /* piano in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89E190CDA7600302415 /* piano */; };
+		8EFDF8A6190CDA7600302415 /* tick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89F190CDA7600302415 /* tick.m4a */; };
+		8EFDF8A7190CDA7600302415 /* touch.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF8A0190CDA7600302415 /* touch.m4a */; };
 		ED05903918322790006C18FA /* UILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED05903518322790006C18FA /* UILayout.cpp */; };
 		ED05903A18322790006C18FA /* UILayoutParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED05903718322790006C18FA /* UILayoutParameter.cpp */; };
 		EDDC623A1832294300DC97D0 /* UIListViewEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EDDC62381832294300DC97D0 /* UIListViewEx.cpp */; };
@@ -736,6 +742,12 @@
 		8C583FAA169DB6D500F63A10 /* CCEditBoxImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCEditBoxImpl.h; path = CCEditBox/CCEditBoxImpl.h; sourceTree = "<group>"; };
 		8C583FAB169DB6D500F63A10 /* CCEditBoxImplMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCEditBoxImplMac.h; path = CCEditBox/CCEditBoxImplMac.h; sourceTree = "<group>"; };
 		8C583FAC169DB6D500F63A10 /* CCEditBoxImplMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CCEditBoxImplMac.mm; path = CCEditBox/CCEditBoxImplMac.mm; sourceTree = "<group>"; };
+		8EFDF89A190CDA7600302415 /* beep.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = beep.m4a; sourceTree = "<group>"; };
+		8EFDF89B190CDA7600302415 /* cheer.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = cheer.m4a; sourceTree = "<group>"; };
+		8EFDF89C190CDA7600302415 /* error.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = error.m4a; sourceTree = "<group>"; };
+		8EFDF89E190CDA7600302415 /* piano */ = {isa = PBXFileReference; lastKnownFileType = folder; path = piano; sourceTree = "<group>"; };
+		8EFDF89F190CDA7600302415 /* tick.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.m4a; sourceTree = "<group>"; };
+		8EFDF8A0190CDA7600302415 /* touch.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = touch.m4a; sourceTree = "<group>"; };
 		ED05903518322790006C18FA /* UILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayout.cpp; sourceTree = "<group>"; };
 		ED05903618322790006C18FA /* UILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayout.h; sourceTree = "<group>"; };
 		ED05903718322790006C18FA /* UILayoutParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayoutParameter.cpp; sourceTree = "<group>"; };
@@ -1709,6 +1721,12 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8EFDF89A190CDA7600302415 /* beep.m4a */,
+				8EFDF89B190CDA7600302415 /* cheer.m4a */,
+				8EFDF89C190CDA7600302415 /* error.m4a */,
+				8EFDF89E190CDA7600302415 /* piano */,
+				8EFDF89F190CDA7600302415 /* tick.m4a */,
+				8EFDF8A0190CDA7600302415 /* touch.m4a */,
 				4101F22219079EC80023F4DB /* fonts */,
 				4101F22319079EC80023F4DB /* whiteBlock.png */,
 			);
@@ -1798,16 +1816,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EFDF8A2190CDA7600302415 /* cheer.m4a in Resources */,
 				41BC70E515BF81A5006A0A6C /* InfoPlist.strings in Resources */,
 				41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */,
+				8EFDF8A6190CDA7600302415 /* tick.m4a in Resources */,
+				8EFDF8A5190CDA7600302415 /* piano in Resources */,
 				41BC70E715BF81A5006A0A6C /* Icon.icns in Resources */,
 				15C157DA168315B300D239F2 /* CMakeLists.txt in Resources */,
 				379BBAAF17F03FDE00829B88 /* json_internalarray.inl in Resources */,
 				379BBAB017F03FDE00829B88 /* json_internalmap.inl in Resources */,
 				4101F22419079EC80023F4DB /* fonts in Resources */,
+				8EFDF8A1190CDA7600302415 /* beep.m4a in Resources */,
 				4101F22519079EC80023F4DB /* whiteBlock.png in Resources */,
 				379BBAB317F03FDE00829B88 /* json_valueiterator.inl in Resources */,
 				379BBAB517F03FDE00829B88 /* sconscript in Resources */,
+				8EFDF8A7190CDA7600302415 /* touch.m4a in Resources */,
+				8EFDF8A3190CDA7600302415 /* error.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,9 +31,9 @@ private:
 private:
     std::string resultTitle;
     std::string currentScore;
-    std::string topScore;
+    float topScore;
     
-    
+    bool isGameover;
     int tileTag;
     int activeTiles;
     int tileCount;
@@ -64,6 +64,7 @@ private:
     void __timerHandler(float del);
     void __initSelectMode();
     void __createGreenResultLayer();
+    void __saveScore();
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene(GameType gameType);

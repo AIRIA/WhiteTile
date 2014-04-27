@@ -1,7 +1,11 @@
 #include "AppDelegate.h"
 #include "HomeScene.h"
+#include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
+using namespace CocosDenshion;
 
 AppDelegate::AppDelegate() {
 
@@ -18,7 +22,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     pDirector->setOpenGLView(pEGLView);
     pEGLView->setDesignResolutionSize(480, 800, kResolutionExactFit);
-    pDirector->setDisplayStats(true);
+//    pDirector->setDisplayStats(true);
     pDirector->setAnimationInterval(1.0 / 60);
     CCScene *pScene = HomeScene::scene();
     pDirector->runWithScene(pScene);
@@ -31,7 +35,7 @@ void AppDelegate::applicationDidEnterBackground() {
     CCDirector::sharedDirector()->stopAnimation();
 
     // if you use SimpleAudioEngine, it must be pause
-    // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
@@ -39,5 +43,5 @@ void AppDelegate::applicationWillEnterForeground() {
     CCDirector::sharedDirector()->startAnimation();
 
     // if you use SimpleAudioEngine, it must resume here
-    // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }

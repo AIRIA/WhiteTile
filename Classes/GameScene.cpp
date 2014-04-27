@@ -11,6 +11,9 @@
 #include "VisibleRect.h"
 #include "HomeScene.h"
 #include "Tile.h"
+#include "cocos-ext.h"
+#include "SimpleAudioEngine.h"
+
 #define WT_BLACK_TILE_SCALE 0.8f
 #define WT_TILES_COUNT 30
 #define WT_TILES_BUFFER 10
@@ -18,6 +21,8 @@
 #define WT_MIN_SPEED 10
 
 using namespace WT;
+using namespace cocos2d::extension;
+using namespace CocosDenshion;
 
 CCScene *GameScene::scene(GameType gameType)
 {
@@ -36,23 +41,40 @@ void GameScene::__initSelectMode()
     switch (gameMode) {
         case kAracade:
             resultTitle = "街机模式";
-            topScore = CCUserDefault::sharedUserDefault()->getStringForKey("aracade","0");
-
+            topScore = CCUserDefault::sharedUserDefault()->getIntegerForKey("aracade",0);
             break;
         case kClassic:
             resultTitle = "经典模式";
             scoreLabel->setString("0.000\"");
-            topScore = CCUserDefault::sharedUserDefault()->getStringForKey("classic","0.000");
+            topScore = CCUserDefault::sharedUserDefault()->getFloatForKey("classic",0.000);
             break;
         case kChan:
             resultTitle = "禅模式";
             scoreLabel->setString("30.000\"");
-            topScore = CCUserDefault::sharedUserDefault()->getStringForKey("chan","0");
+            topScore = CCUserDefault::sharedUserDefault()->getIntegerForKey("chan",0);
             break;
         default:
             break;
     }
     CCLog("select mode:%s",resultTitle.c_str());
+}
+
+void GameScene::__saveScore()
+{
+    switch (gameMode) {
+        case kAracade:
+            CCUserDefault::sharedUserDefault()->setIntegerForKey("aracade",topScore);
+            break;
+        case kClassic:
+            CCUserDefault::sharedUserDefault()->setFloatForKey("classic",topScore);
+            break;
+        case kChan:
+            CCUserDefault::sharedUserDefault()->setIntegerForKey("chan",topScore);
+            break;
+        default:
+            break;
+    }
+    CCUserDefault::sharedUserDefault()->flush();
 }
 
 void GameScene::onEnter()
@@ -108,10 +130,7 @@ void GameScene::__blinkHandler()
 {
     removeAllChildren();
     __showResult();
-    GameConfig::score = 0;
-    GameConfig::speed = WT_INIT_SPEED;
-    GameConfig::tileCount = 0;
-    GameConfig::passScreens = 0;
+    
 }
 
 /* 初始化游戏需要的属性 包括黑块儿的大小 */
@@ -120,7 +139,7 @@ bool GameScene::init()
     if (!CCLayer::init()) {
         return false;
     }
-    
+    isGameover = false;
     tileCount = WT_TILES_COUNT;
     activeTiles = 1;
     tileTag = 1;
@@ -168,7 +187,7 @@ void GameScene::__createGreenResultLayer()
     resultLayer->ignoreAnchorPointForPosition(false);
     resultLayer->setAnchorPoint(CCPointZero);
 //    resultLayer->setPosition(CCPointZero);
-    resultLayer->setPosition(ccp(0.0,m_winSize.height/4*GameConfig::tileCount));
+    resultLayer->setPosition(ccp(0.0,(m_winSize.height+2)/4*GameConfig::tileCount));
     GameConfig::scroller->addChild(resultLayer);
 }
 
@@ -207,25 +226,24 @@ void GameScene::createTile(int rows)
             if(tile==NULL){
                 tile = WT::Tile::create();
                 tile->isRendering = true;
+                tile->setTouchEnabled(true);
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX, m_fTileScaleY);
                 tileBatchNode->addChild(tile);
                 tilePools->addObject(tile);
                 tile->setTargetEnded(this, menu_selector(GameScene::__tileTouchUpHandler));
-                tile->setTargetBegan(this, menu_selector(GameScene::__tileTouchDownHandler));
+                tile->setTargetBegan(this, menu_selector(GameScene::__whiteTileTouchHandler));
             }
             tile->row = row;
             tile->col = j;
             tile->setPosition(ccp((j+0.5)*(m_fTileWidth+1),(row+0.5)*(m_fTileHeight+1)));
-            tile->setTouchEnabled(false);
+//            tile->setTouchEnabled(false);
             tile->setTag(tileTag++);
             if (randomPos==j&&row>0) {
                 tile->setColor(ccBLACK);
                 GameConfig::tileCount++;
                 activeTiles++;
                 m_vBlackTags.push_back(tile->getTag());
-                if(row==1){
-                    tile->setTouchEnabled(true);
-                }
+                tile->setTargetBegan(this, menu_selector(GameScene::__tileTouchDownHandler));
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX*WT_BLACK_TILE_SCALE, m_fTileScaleY*WT_BLACK_TILE_SCALE);
             }else if(randomPos==j&&row==0){
                 GameConfig::tileCount++;
@@ -237,6 +255,7 @@ void GameScene::createTile(int rows)
             }
         }
     }
+    CCLog("tilecount:%d",GameConfig::tileCount);
 }
 
 void GameScene::startGame(cocos2d::CCObject *pSender)
@@ -277,35 +296,69 @@ void GameScene::update(float delta)
 
 void GameScene::__showResult()
 {
+    
     removeChild(GameConfig::scroller);
     CCLayerColor *resultLayer = CCLayerColor::create(ccc4(227,48,56, 255),m_winSize.width,m_winSize.height);
     resultLayer->ignoreAnchorPointForPosition(false);
     resultLayer->setAnchorPoint(CCPointZero);
     resultLayer->setPosition(CCPointZero);
-    if (gameMode==kClassic) {
-        GameConfig::scroller->addChild(resultLayer);
-        resultLayer->setColor(ccGREEN);
-        resultLayer->setPosition(ccp(0, GameConfig::tileCount*m_winSize.height/4));
-    }else{
-        addChild(resultLayer);
-    }
+    
+    addChild(resultLayer);
     CCLabelTTF *title = CCLabelTTF::create(resultTitle.c_str(), "Arial", 50);
     title->setColor(ccWHITE);
     title->setPosition(VisibleRect::top()-ccp(0,150));
     resultLayer->addChild(title);
     
-    char scoreStr[20];
-    sprintf(scoreStr, "%d",GameConfig::score);
-    CCLabelTTF *score = CCLabelTTF::create(scoreStr, "fonts/SourceSansPro-Bold.ttf",150);
+    char scoreStr[20],recordStr[20];
+    int scoreSize = 150;
+    if (gameMode==kClassic) {
+        if(GameConfig::score<GameConfig::tileCount-1){
+            sprintf(scoreStr, "败了!");
+            sprintf(recordStr, "");
+            scoreSize = 200;
+        }else{
+            scoreSize = 80;
+            resultLayer->setColor(ccc3(73,178,87));
+            sprintf(scoreStr, "%1.3f\"",m_fClassicTime);
+            
+            if (topScore > m_fClassicTime) {
+                sprintf(recordStr, "新纪录");
+                topScore = m_fClassicTime;
+            }else if(topScore>0){
+                sprintf(recordStr, "最佳 %1.3f\"",topScore);
+            }else{
+                sprintf(recordStr, "暂无历史成绩");
+                topScore = m_fClassicTime;
+            }
+        }
+        
+    }else{
+        sprintf(scoreStr, "%d",GameConfig::score);
+        if(GameConfig::score>topScore){
+            sprintf(recordStr, "新纪录");
+            topScore = GameConfig::score;
+        }else if(topScore>0){
+            sprintf(recordStr, "最佳 %1.0f",topScore);
+        }else{
+            sprintf(recordStr, "暂无历史成绩");
+            topScore = GameConfig::score;
+        }
+    }
+    CCLabelTTF *score = CCLabelTTF::create(scoreStr, "fonts/SourceSansPro-Bold.ttf",scoreSize);
     score->setPosition(title->getPosition()-ccp(0, 180));
     score->setColor(ccBLACK);
     resultLayer->addChild(score);
     
-    sprintf(scoreStr, "最佳成绩:%d",GameConfig::score);
-    CCLabelTTF *best = CCLabelTTF::create(scoreStr, "Arial", 30);
+    CCLabelTTF *best = CCLabelTTF::create(recordStr, "Arial", 30);
     best->setPosition(score->getPosition()-ccp(0,100));
     best->setColor(ccBLACK);
     resultLayer->addChild(best);
+    
+    CCLabelTTF *des = CCLabelTTF::create("牛逼闪闪哦~", "Arial", 50);
+    des->setColor(ccWHITE);
+    des->setPosition(best->getPosition()-ccp(0,90));
+//    resultLayer->addChild(des);
+    
     CCMenuItemFont *share = CCMenuItemFont::create("炫耀",this,NULL);
 
     CCMenuItemFont *quit = CCMenuItemFont::create("返回", this, menu_selector(GameScene::__backHandler));
@@ -317,6 +370,11 @@ void GameScene::__showResult()
     menu->setPositionY(200);
     menu->alignItemsHorizontallyWithPadding(50);
     resultLayer->addChild(menu);
+    __saveScore();
+    GameConfig::score = 0;
+    GameConfig::speed = WT_INIT_SPEED;
+    GameConfig::tileCount = 0;
+    GameConfig::passScreens = 0;
 }
 
 void GameScene::__backHandler(cocos2d::CCObject *pSender)
@@ -332,6 +390,9 @@ void GameScene::__retryHandler(cocos2d::CCObject *pSender)
 
 void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
 {
+    if (isGameover) {
+        return;
+    }
     WT::Tile *tile = (WT::Tile*)pSender;
     tile->setColor(ccGRAY);
     tile->unscheduleUpdate();
@@ -343,17 +404,18 @@ void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
     if(gameMode!=kAracade)
     {
         CCActionInterval *move = NULL;
-        if (gameMode==kClassic&&GameConfig::score==GameConfig::tileCount-1) {
-            move = CCMoveBy::create(0.1f, ccp(0,-m_winSize.height/4-0.5));
+        if (gameMode==kClassic&&GameConfig::score==GameConfig::tileCount-2) {
+            move = CCMoveBy::create(0.1f, ccp(0,(-m_winSize.height/4))*2);
+            CCCallFunc *moveHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__showResult));
+            GameConfig::scroller->runAction(CCSequence::create(move,moveHandler,NULL));
+            unschedule(schedule_selector(GameScene::__timerHandler));
         }else{
-            move = CCMoveBy::create(0.1f, ccp(0,(-m_winSize.height/4-0.5)*2));
+            move = CCMoveBy::create(0.1f, ccp(0,(-m_winSize.height/4-0.5)));
+            GameConfig::scroller->runAction(move);
         }
-        GameConfig::scroller->runAction(move);
+        
     }
-    if (gameMode==kClassic&&GameConfig::score==GameConfig::tileCount) {
-        CCActionInterval *move = CCMoveBy::create(0.1f, ccp(0,-m_winSize.height/4-0.5));
-        GameConfig::scroller->runAction(move);
-    }
+    
 }
 
 void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
@@ -414,7 +476,19 @@ void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
 /* GameOver */
 void GameScene::__whiteTileTouchHandler(cocos2d::CCObject *pSender)
 {
-    
+    SimpleAudioEngine::sharedEngine()->playEffect("error.m4a");
+    isGameover = true;
+    unscheduleUpdate();
+    unschedule(schedule_selector(GameScene::__timerHandler));
+    WT::Tile *tile = (WT::Tile*)pSender;
+    tile->setTouchEnabled(false);
+    tile->setColor(ccRED);
+    CCActionInterval *fadeOut = CCFadeOut::create(0.15f);
+    CCActionInterval *fadeIn = CCFadeOut::create(0.15f);
+    CCActionInterval *fadeSeq = CCSequence::create(fadeOut,fadeIn,NULL);
+    CCActionInterval *blink = CCRepeat::create(fadeSeq, 3);
+    CCActionInstant *blinkHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__blinkHandler));
+    tile->runAction(CCSequence::create(blink,blinkHandler,NULL));
 }
 
 /*-------------------------------------------------------------------------------------*/

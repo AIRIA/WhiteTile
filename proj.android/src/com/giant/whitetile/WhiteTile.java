@@ -26,15 +26,14 @@ package com.giant.whitetile;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
+
+import com.giant.share.WeiXinManager;
+import com.google.ads.AdView;
 
 public class WhiteTile extends Cocos2dxActivity {
 
@@ -45,6 +44,7 @@ public class WhiteTile extends Cocos2dxActivity {
 		super.onCreate(savedInstanceState);
 		AdsAdmob.mContext = this;
 		PluginWrapper.init(this);
+		WeiXinManager.init(this);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView() {

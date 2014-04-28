@@ -8,6 +8,8 @@
 #include "BaseSprite.h"
 #include "ShareLayer.h"
 #include "VisibleRect.h"
+#include "ShareUtil.h"
+
 #define WT_ACT_TIME 0.2f
 
 bool ShareLayer::init()
@@ -78,5 +80,13 @@ void ShareLayer::__cancelHandler(cocos2d::CCObject *pSender)
 
 void ShareLayer::__weixinHandler(cocos2d::CCObject *pSender)
 {
-    
+    CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+    CCRenderTexture *render = CCRenderTexture::create(winSize.width, winSize.height);
+    CCScene *runningScene = CCDirector::sharedDirector()->getRunningScene();
+    render->begin();
+    removeFromParent();
+    runningScene->visit();
+    render->end();
+    render->saveToFile("record.png",kCCImageFormatPNG);
+    ShareUtil::share2wx((CCFileUtils::sharedFileUtils()->getWritablePath()+"record.png").c_str());
 }

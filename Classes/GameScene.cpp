@@ -320,7 +320,7 @@ void GameScene::__showResult()
     if (gameMode==kClassic) {
         if(GameConfig::score<GameConfig::tileCount-1){
             sprintf(scoreStr, "败了!");
-            sprintf(recordStr, "");
+            sprintf(recordStr, " ");
             scoreSize = 200;
         }else{
             scoreSize = 80;

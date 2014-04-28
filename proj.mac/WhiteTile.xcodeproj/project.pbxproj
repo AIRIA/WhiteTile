@@ -251,6 +251,7 @@
 		8EFDF8A5190CDA7600302415 /* piano in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89E190CDA7600302415 /* piano */; };
 		8EFDF8A6190CDA7600302415 /* tick.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF89F190CDA7600302415 /* tick.m4a */; };
 		8EFDF8A7190CDA7600302415 /* touch.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8EFDF8A0190CDA7600302415 /* touch.m4a */; };
+		8EFDF8AB190EA27D00302415 /* ShareUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EFDF8A9190EA27D00302415 /* ShareUtil.cpp */; };
 		ED05903918322790006C18FA /* UILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED05903518322790006C18FA /* UILayout.cpp */; };
 		ED05903A18322790006C18FA /* UILayoutParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED05903718322790006C18FA /* UILayoutParameter.cpp */; };
 		EDDC623A1832294300DC97D0 /* UIListViewEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EDDC62381832294300DC97D0 /* UIListViewEx.cpp */; };
@@ -756,6 +757,8 @@
 		8EFDF89E190CDA7600302415 /* piano */ = {isa = PBXFileReference; lastKnownFileType = folder; path = piano; sourceTree = "<group>"; };
 		8EFDF89F190CDA7600302415 /* tick.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.m4a; sourceTree = "<group>"; };
 		8EFDF8A0190CDA7600302415 /* touch.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = touch.m4a; sourceTree = "<group>"; };
+		8EFDF8A9190EA27D00302415 /* ShareUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShareUtil.cpp; path = ../Classes/ShareUtil.cpp; sourceTree = "<group>"; };
+		8EFDF8AA190EA27D00302415 /* ShareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareUtil.h; path = ../Classes/ShareUtil.h; sourceTree = "<group>"; };
 		ED05903518322790006C18FA /* UILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayout.cpp; sourceTree = "<group>"; };
 		ED05903618322790006C18FA /* UILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayout.h; sourceTree = "<group>"; };
 		ED05903718322790006C18FA /* UILayoutParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayoutParameter.cpp; sourceTree = "<group>"; };
@@ -1686,6 +1689,8 @@
 				4101F22F190DEE0E0023F4DB /* ShareLayer.h */,
 				4101F233190E3AE10023F4DB /* AdUtil.cpp */,
 				4101F234190E3AE10023F4DB /* AdUtil.h */,
+				8EFDF8A9190EA27D00302415 /* ShareUtil.cpp */,
+				8EFDF8AA190EA27D00302415 /* ShareUtil.h */,
 			);
 			name = components;
 			sourceTree = "<group>";
@@ -1967,6 +1972,7 @@
 				15C1592E168315E500D239F2 /* CCParticleSystemQuadLoader.cpp in Sources */,
 				4101F22B1908FFA00023F4DB /* Tile.cpp in Sources */,
 				15C1592F168315E500D239F2 /* CCScale9SpriteLoader.cpp in Sources */,
+				8EFDF8AB190EA27D00302415 /* ShareUtil.cpp in Sources */,
 				15C15930168315E500D239F2 /* CCScrollViewLoader.cpp in Sources */,
 				15C15931168315E500D239F2 /* CCSpriteLoader.cpp in Sources */,
 				15C15932168315E500D239F2 /* CCControl.cpp in Sources */,

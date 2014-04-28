@@ -65,6 +65,7 @@ private:
     void __initSelectMode();
     void __createGreenResultLayer();
     void __saveScore();
+    void __shareHandler(CCObject *pSender);
 public:
     void startGame(CCObject *pSender);
     static CCScene *scene(GameType gameType);

@@ -230,6 +230,8 @@
 		4101F22519079EC80023F4DB /* whiteBlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4101F22319079EC80023F4DB /* whiteBlock.png */; };
 		4101F2281908F8A80023F4DB /* BaseSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F2261908F8A80023F4DB /* BaseSprite.cpp */; };
 		4101F22B1908FFA00023F4DB /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F2291908FFA00023F4DB /* Tile.cpp */; };
+		4101F230190DEE0E0023F4DB /* ShareLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */; };
+		4101F232190DEF540023F4DB /* share in Resources */ = {isa = PBXBuildFile; fileRef = 4101F231190DEF540023F4DB /* share */; };
 		4130C4C11904D5FD00FEBBA5 /* VisibleRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */; };
 		4130C4C71904D91300FEBBA5 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */; };
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
@@ -719,6 +721,9 @@
 		4101F2271908F8A80023F4DB /* BaseSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseSprite.h; path = ../Classes/BaseSprite.h; sourceTree = "<group>"; };
 		4101F2291908FFA00023F4DB /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = ../Classes/Tile.cpp; sourceTree = "<group>"; };
 		4101F22A1908FFA00023F4DB /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tile.h; path = ../Classes/Tile.h; sourceTree = "<group>"; };
+		4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShareLayer.cpp; path = ../Classes/ShareLayer.cpp; sourceTree = "<group>"; };
+		4101F22F190DEE0E0023F4DB /* ShareLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareLayer.h; path = ../Classes/ShareLayer.h; sourceTree = "<group>"; };
+		4101F231190DEF540023F4DB /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; path = share; sourceTree = "<group>"; };
 		4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleRect.cpp; path = ../Classes/VisibleRect.cpp; sourceTree = "<group>"; };
 		4130C4C01904D5FD00FEBBA5 /* VisibleRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleRect.h; path = ../Classes/VisibleRect.h; sourceTree = "<group>"; };
 		4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseLayer.cpp; path = ../Classes/BaseLayer.cpp; sourceTree = "<group>"; };
@@ -786,6 +791,7 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4101F22D190DEDEB0023F4DB /* components */,
 				4130C4C91904DEB700FEBBA5 /* base */,
 				4130C4C81904DEA900FEBBA5 /* game */,
 				4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */,
@@ -1670,6 +1676,15 @@
 			path = CocoStudio;
 			sourceTree = "<group>";
 		};
+		4101F22D190DEDEB0023F4DB /* components */ = {
+			isa = PBXGroup;
+			children = (
+				4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */,
+				4101F22F190DEE0E0023F4DB /* ShareLayer.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
 		4130C4C81904DEA900FEBBA5 /* game */ = {
 			isa = PBXGroup;
 			children = (
@@ -1721,6 +1736,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4101F231190DEF540023F4DB /* share */,
 				8EFDF89A190CDA7600302415 /* beep.m4a */,
 				8EFDF89B190CDA7600302415 /* cheer.m4a */,
 				8EFDF89C190CDA7600302415 /* error.m4a */,
@@ -1830,6 +1846,7 @@
 				4101F22519079EC80023F4DB /* whiteBlock.png in Resources */,
 				379BBAB317F03FDE00829B88 /* json_valueiterator.inl in Resources */,
 				379BBAB517F03FDE00829B88 /* sconscript in Resources */,
+				4101F232190DEF540023F4DB /* share in Resources */,
 				8EFDF8A7190CDA7600302415 /* touch.m4a in Resources */,
 				8EFDF8A3190CDA7600302415 /* error.m4a in Resources */,
 			);
@@ -2006,6 +2023,7 @@
 				379BBA7817F03FDE00829B88 /* CCActionFrame.cpp in Sources */,
 				379BBA7917F03FDE00829B88 /* CCActionFrameEasing.cpp in Sources */,
 				379BBA7A17F03FDE00829B88 /* CCActionManager.cpp in Sources */,
+				4101F230190DEE0E0023F4DB /* ShareLayer.cpp in Sources */,
 				379BBA7B17F03FDE00829B88 /* CCActionNode.cpp in Sources */,
 				379BBA7C17F03FDE00829B88 /* CCActionObject.cpp in Sources */,
 				379BBA7D17F03FDE00829B88 /* CCArmatureAnimation.cpp in Sources */,

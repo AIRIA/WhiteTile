@@ -13,6 +13,8 @@
 #include "Tile.h"
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
+#include "ShareLayer.h"
+
 
 #define WT_BLACK_TILE_SCALE 0.8f
 #define WT_TILES_COUNT 30
@@ -359,7 +361,7 @@ void GameScene::__showResult()
     des->setPosition(best->getPosition()-ccp(0,90));
 //    resultLayer->addChild(des);
     
-    CCMenuItemFont *share = CCMenuItemFont::create("炫耀",this,NULL);
+    CCMenuItemFont *share = CCMenuItemFont::create("炫耀",this,menu_selector(GameScene::__shareHandler));
 
     CCMenuItemFont *quit = CCMenuItemFont::create("返回", this, menu_selector(GameScene::__backHandler));
     CCMenuItemFont *retry = CCMenuItemFont::create("重来",this, menu_selector(GameScene::__retryHandler));
@@ -524,4 +526,11 @@ void GameScene::__timerHandler(float del)
     }
     scoreLabel->setString(timeStr);
     scoreLabelShadow->setString(timeStr);
+}
+/*        share        */
+
+void GameScene::__shareHandler(cocos2d::CCObject *pSender)
+{
+    ShareLayer *sl = ShareLayer::create();
+    addChild(sl);
 }

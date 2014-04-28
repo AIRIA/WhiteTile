@@ -232,6 +232,7 @@
 		4101F22B1908FFA00023F4DB /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F2291908FFA00023F4DB /* Tile.cpp */; };
 		4101F230190DEE0E0023F4DB /* ShareLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */; };
 		4101F232190DEF540023F4DB /* share in Resources */ = {isa = PBXBuildFile; fileRef = 4101F231190DEF540023F4DB /* share */; };
+		4101F235190E3AE10023F4DB /* AdUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4101F233190E3AE10023F4DB /* AdUtil.cpp */; };
 		4130C4C11904D5FD00FEBBA5 /* VisibleRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */; };
 		4130C4C71904D91300FEBBA5 /* BaseLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */; };
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
@@ -724,6 +725,8 @@
 		4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShareLayer.cpp; path = ../Classes/ShareLayer.cpp; sourceTree = "<group>"; };
 		4101F22F190DEE0E0023F4DB /* ShareLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareLayer.h; path = ../Classes/ShareLayer.h; sourceTree = "<group>"; };
 		4101F231190DEF540023F4DB /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; path = share; sourceTree = "<group>"; };
+		4101F233190E3AE10023F4DB /* AdUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdUtil.cpp; path = ../Classes/AdUtil.cpp; sourceTree = "<group>"; };
+		4101F234190E3AE10023F4DB /* AdUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdUtil.h; path = ../Classes/AdUtil.h; sourceTree = "<group>"; };
 		4130C4BF1904D5FD00FEBBA5 /* VisibleRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleRect.cpp; path = ../Classes/VisibleRect.cpp; sourceTree = "<group>"; };
 		4130C4C01904D5FD00FEBBA5 /* VisibleRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleRect.h; path = ../Classes/VisibleRect.h; sourceTree = "<group>"; };
 		4130C4C51904D91300FEBBA5 /* BaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseLayer.cpp; path = ../Classes/BaseLayer.cpp; sourceTree = "<group>"; };
@@ -1681,6 +1684,8 @@
 			children = (
 				4101F22E190DEE0E0023F4DB /* ShareLayer.cpp */,
 				4101F22F190DEE0E0023F4DB /* ShareLayer.h */,
+				4101F233190E3AE10023F4DB /* AdUtil.cpp */,
+				4101F234190E3AE10023F4DB /* AdUtil.h */,
 			);
 			name = components;
 			sourceTree = "<group>";
@@ -2029,6 +2034,7 @@
 				379BBA7D17F03FDE00829B88 /* CCArmatureAnimation.cpp in Sources */,
 				379BBA7E17F03FDE00829B88 /* CCProcessBase.cpp in Sources */,
 				379BBA7F17F03FDE00829B88 /* CCTween.cpp in Sources */,
+				4101F235190E3AE10023F4DB /* AdUtil.cpp in Sources */,
 				379BBA8017F03FDE00829B88 /* CCArmature.cpp in Sources */,
 				379BBA8117F03FDE00829B88 /* CCBone.cpp in Sources */,
 				379BBA8217F03FDE00829B88 /* CCDatas.cpp in Sources */,

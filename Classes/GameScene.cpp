@@ -14,7 +14,7 @@
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
 #include "ShareLayer.h"
-
+#include "AdUtil.h"
 
 #define WT_BLACK_TILE_SCALE 0.8f
 #define WT_TILES_COUNT 30
@@ -28,6 +28,7 @@ using namespace CocosDenshion;
 
 CCScene *GameScene::scene(GameType gameType)
 {
+    AdUtil::init();
     CCScene *scene = CCScene::create();
     GameConfig::gameType = gameType;
     GameScene *game = GameScene::create();
@@ -141,6 +142,7 @@ bool GameScene::init()
     if (!CCLayer::init()) {
         return false;
     }
+    AdUtil::showAds();
     isGameover = false;
     tileCount = WT_TILES_COUNT;
     activeTiles = 1;
@@ -240,11 +242,13 @@ void GameScene::createTile(int rows)
             tile->setPosition(ccp((j+0.5)*(m_fTileWidth+1),(row+0.5)*(m_fTileHeight+1)));
 //            tile->setTouchEnabled(false);
             tile->setTag(tileTag++);
+            tile->setTouchPriority(10);
             if (randomPos==j&&row>0) {
                 tile->setColor(ccBLACK);
                 GameConfig::tileCount++;
                 activeTiles++;
                 m_vBlackTags.push_back(tile->getTag());
+                tile->setTouchPriority(0);
                 tile->setTargetBegan(this, menu_selector(GameScene::__tileTouchDownHandler));
                 tile->cocos2d::CCNode::setScale(m_fTileScaleX*WT_BLACK_TILE_SCALE, m_fTileScaleY*WT_BLACK_TILE_SCALE);
             }else if(randomPos==j&&row==0){
@@ -478,6 +482,8 @@ void GameScene::__tileTouchUpHandler(cocos2d::CCObject *pSender)
 /* GameOver */
 void GameScene::__whiteTileTouchHandler(cocos2d::CCObject *pSender)
 {
+    if(isGameover)
+        return;
     SimpleAudioEngine::sharedEngine()->playEffect("error.m4a");
     isGameover = true;
     unscheduleUpdate();
@@ -509,6 +515,7 @@ void GameScene::__timerHandler(float del)
                 m_fChanTime = 0.000f;
                 unschedule(schedule_selector(GameScene::__timerHandler));
                 sprintf(timeStr, "时间到了");
+                isGameover = true;
                 CCActionInterval *fadeOut = CCFadeOut::create(0.15f);
                 CCActionInterval *fadeIn = CCFadeOut::create(0.15f);
                 CCActionInterval *fadeSeq = CCSequence::create(fadeOut,fadeIn,NULL);
@@ -531,6 +538,7 @@ void GameScene::__timerHandler(float del)
 
 void GameScene::__shareHandler(cocos2d::CCObject *pSender)
 {
+    AdUtil::hideAds();
     ShareLayer *sl = ShareLayer::create();
     addChild(sl);
 }

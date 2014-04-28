@@ -13,9 +13,11 @@
 
 #define MENU_FONT_SIZE 40
 #define SUB_MENU_FONT_SIZE 20
+#include "AdUtil.h"
 
 CCScene *HomeScene::scene()
 {
+    AdUtil::hideAds();
     CCScene *homeScene = CCScene::create();
     homeScene->addChild(HomeScene::create());
     return homeScene;

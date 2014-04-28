@@ -15,7 +15,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/GameConfig.cpp \
                    ../../Classes/BaseSprite.cpp \
                    ../../Classes/Tile.cpp \
-                   ../../Classes/ShareLayer.cpp
+                   ../../Classes/ShareLayer.cpp \
+                   ../../Classes/AdUtil.cpp 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

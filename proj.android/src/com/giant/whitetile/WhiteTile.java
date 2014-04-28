@@ -26,6 +26,10 @@ package com.giant.whitetile;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -34,10 +38,13 @@ import android.view.KeyEvent;
 
 public class WhiteTile extends Cocos2dxActivity {
 
-	AlertDialog exitDialog;
+	private AlertDialog exitDialog;
+	private AdView adView;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		AdsAdmob.mContext = this;
+		PluginWrapper.init(this);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView() {
@@ -75,4 +82,11 @@ public class WhiteTile extends Cocos2dxActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
+	protected void onDestroy(){
+		if(adView!=null){
+			adView.destroy();
+		}
+		super.onDestroy();
+	}
+	
 }

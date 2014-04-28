@@ -2,6 +2,7 @@
 #include "HomeScene.h"
 #include "cocos-ext.h"
 #include "SimpleAudioEngine.h"
+#include "AdUtil.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -16,6 +17,7 @@ AppDelegate::~AppDelegate()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+	AdUtil::init();
     // initialize director
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();

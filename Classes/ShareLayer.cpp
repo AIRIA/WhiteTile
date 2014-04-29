@@ -9,8 +9,11 @@
 #include "ShareLayer.h"
 #include "VisibleRect.h"
 #include "ShareUtil.h"
+#include "SimpleAudioEngine.h"
 
 #define WT_ACT_TIME 0.2f
+
+using namespace CocosDenshion;
 
 bool ShareLayer::init()
 {
@@ -81,10 +84,29 @@ void ShareLayer::__cancelHandler(cocos2d::CCObject *pSender)
 void ShareLayer::__weixinHandler(cocos2d::CCObject *pSender)
 {
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+    CCSprite *sprite = CCSprite::create("whiteBlock.png");
+    CCSize sprSize = sprite->getContentSize();
+    sprite->setScaleX(winSize.width/sprSize.width);
+    sprite->setScaleY(winSize.height/sprSize.height);
+    sprite->setPosition(VisibleRect::center());
+    sprite->setOpacity(0);
+    CCActionInterval *fadeIn = CCFadeIn::create(0.2f);
+    CCActionInterval *fadeOut = CCFadeOut::create(0.2f);
+    CCCallFunc *fadeAct = CCCallFunc::create(this, callfunc_selector(ShareLayer::__shareHandler));
+    CCSequence *seqAct = CCSequence::create(fadeIn,fadeOut,fadeAct,NULL);
+    sprite->runAction(seqAct);
+    removeFromParent();
+    CCScene *runningScene = CCDirector::sharedDirector()->getRunningScene();
+    runningScene->addChild(sprite);
+    SimpleAudioEngine::sharedEngine()->playEffect("tick.m4a");
+}
+
+void ShareLayer::__shareHandler()
+{
+    CCSize winSize = CCDirector::sharedDirector()->getWinSize();
     CCRenderTexture *render = CCRenderTexture::create(winSize.width, winSize.height);
     CCScene *runningScene = CCDirector::sharedDirector()->getRunningScene();
     render->begin();
-    removeFromParent();
     runningScene->visit();
     render->end();
     render->saveToFile("record.png",kCCImageFormatPNG);

@@ -23,7 +23,8 @@ private:
     void __classicHandler(CCObject *pSender);
     void __chanHandler(CCObject *pSender);
     void __arcadeHandler(CCObject *pSender);
-    
+    void __markGame(CCObject *pSender);
+    void __guideHandler(CCObject *pSender);
 public:
     static CCScene *scene();
     virtual bool init();

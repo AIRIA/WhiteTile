@@ -21,6 +21,7 @@ using namespace cocos2d;
 
 class ShareUtil{
 public:
+	static void mark();
     static void share2wx(const char *imagePath);
 };
 

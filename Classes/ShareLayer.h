@@ -17,6 +17,7 @@ class ShareLayer:public BaseLayer
 private:
     void __cancelHandler(CCObject *pSender);
     void __weixinHandler(CCObject *pSender);
+    void __shareHandler();
 public:
     virtual bool init();
     CREATE_FUNC(ShareLayer);

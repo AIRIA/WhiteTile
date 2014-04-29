@@ -238,6 +238,7 @@
 		4130C4CC1904DED700FEBBA5 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CA1904DED700FEBBA5 /* HomeScene.cpp */; };
 		4130C4CF19050EFE00FEBBA5 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4CD19050EFE00FEBBA5 /* GameScene.cpp */; };
 		4130C4D219050FCA00FEBBA5 /* GameConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4130C4D019050FCA00FEBBA5 /* GameConfig.cpp */; };
+		41A91B1E190F6644000FB614 /* PianoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41A91B1C190F6644000FB614 /* PianoPlayer.cpp */; };
 		41BC70E415BF81A5006A0A6C /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70DA15BF81A5006A0A6C /* AppController.mm */; };
 		41BC70E515BF81A5006A0A6C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DC15BF81A5006A0A6C /* InfoPlist.strings */; };
 		41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DE15BF81A5006A0A6C /* MainMenu.xib */; };
@@ -738,6 +739,8 @@
 		4130C4CE19050EFE00FEBBA5 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = ../Classes/GameScene.h; sourceTree = "<group>"; };
 		4130C4D019050FCA00FEBBA5 /* GameConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameConfig.cpp; path = ../Classes/GameConfig.cpp; sourceTree = "<group>"; };
 		4130C4D119050FCA00FEBBA5 /* GameConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConfig.h; path = ../Classes/GameConfig.h; sourceTree = "<group>"; };
+		41A91B1C190F6644000FB614 /* PianoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PianoPlayer.cpp; path = ../Classes/PianoPlayer.cpp; sourceTree = "<group>"; };
+		41A91B1D190F6644000FB614 /* PianoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PianoPlayer.h; path = ../Classes/PianoPlayer.h; sourceTree = "<group>"; };
 		41BC70D915BF81A5006A0A6C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = SOURCE_ROOT; };
 		41BC70DA15BF81A5006A0A6C /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = SOURCE_ROOT; };
 		41BC70DD15BF81A5006A0A6C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -1691,6 +1694,8 @@
 				4101F234190E3AE10023F4DB /* AdUtil.h */,
 				8EFDF8A9190EA27D00302415 /* ShareUtil.cpp */,
 				8EFDF8AA190EA27D00302415 /* ShareUtil.h */,
+				41A91B1C190F6644000FB614 /* PianoPlayer.cpp */,
+				41A91B1D190F6644000FB614 /* PianoPlayer.h */,
 			);
 			name = components;
 			sourceTree = "<group>";
@@ -2065,6 +2070,7 @@
 				379BBA9417F03FDE00829B88 /* CCInputDelegate.cpp in Sources */,
 				379BBA9517F03FDE00829B88 /* UIRootWidget.cpp in Sources */,
 				379BBA9617F03FDE00829B88 /* UIWidget.cpp in Sources */,
+				41A91B1E190F6644000FB614 /* PianoPlayer.cpp in Sources */,
 				379BBA9A17F03FDE00829B88 /* UILayoutDefine.cpp in Sources */,
 				379BBA9B17F03FDE00829B88 /* CocosGUI.cpp in Sources */,
 				379BBA9C17F03FDE00829B88 /* UIHelper.cpp in Sources */,

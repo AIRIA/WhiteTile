@@ -8,9 +8,11 @@
 
 #include "GameConfig.h"
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
+
 
 using namespace cocos2d;
-
+using namespace CocosDenshion;
 SoundType GameConfig::soundType = kPiano;
 GameType GameConfig::gameType = kClassic;
 bool GameConfig::guide = true;
@@ -25,6 +27,12 @@ CCNode *GameConfig::scroller = NULL;
 
 void GameConfig::init()
 {
+    
+    char keyName[20];
+    for (int i=1; i<27; i++) {
+        sprintf(keyName,"piano/sound%d.mp3",i);
+        SimpleAudioEngine::sharedEngine()->preloadEffect(keyName);
+    }
     CCUserDefault *userDefualt = CCUserDefault::sharedUserDefault();
     if(userDefualt->isXMLFileExist()==true)
     {

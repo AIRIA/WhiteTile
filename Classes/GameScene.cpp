@@ -15,6 +15,7 @@
 #include "SimpleAudioEngine.h"
 #include "ShareLayer.h"
 #include "AdUtil.h"
+#include "PianoPlayer.h"
 
 #define WT_BLACK_TILE_SCALE 0.8f
 #define WT_TILES_COUNT 30
@@ -367,6 +368,7 @@ void GameScene::__showResult()
 			if (topScore > m_fClassicTime)
 			{
 				sprintf(recordStr, "新纪录");
+                SimpleAudioEngine::sharedEngine()->playEffect("cheer.m4a");
 				topScore = m_fClassicTime;
 			}
 			else if (topScore > 0)
@@ -388,6 +390,7 @@ void GameScene::__showResult()
 		{
 			sprintf(recordStr, "新纪录");
 			topScore = GameConfig::score;
+            SimpleAudioEngine::sharedEngine()->playEffect("cheer.m4a");
 		}
 		else if (topScore > 0)
 		{
@@ -474,6 +477,7 @@ void GameScene::__tileTouchDownHandler(cocos2d::CCObject *pSender)
 		}
 
 	}
+    PianoPlayer::play();
 
 }
 

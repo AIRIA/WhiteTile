@@ -11,11 +11,11 @@
 
 #include <iostream>
 #include "cocos2d.h"
-//#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include <android/log.h>
-//#endif
+#endif
 
 using namespace cocos2d;
 

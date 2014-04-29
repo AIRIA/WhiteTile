@@ -17,7 +17,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Tile.cpp \
                    ../../Classes/ShareLayer.cpp \
                    ../../Classes/AdUtil.cpp \
-                   ../../Classes/ShareUtil.cpp
+                   ../../Classes/ShareUtil.cpp \
+                   ../../Classes/PianoPlayer.cpp 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

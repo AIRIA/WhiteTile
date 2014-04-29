@@ -53,11 +53,11 @@ bool HomeScene::init()
     guide->setTarget(this, menu_selector(HomeScene::__guideHandler));
     guide->setTag(kGuide);
     BaseLayer *rank = __getMenuLayerItem(cc4WHITE, ccBLACK, CCSize(winSize.width/2,winSize.height/10), ccp(0.0f, 1.0f), VisibleRect::center()-ccp(0,winSize.height/10)*2, "排行榜", SUB_MENU_FONT_SIZE);
-    rank->setTarget(this, NULL);
+    rank->setTarget(this, menu_selector(HomeScene::__markGame));
     BaseLayer *mark = __getMenuLayerItem(cc4BLACK, ccWHITE, CCSize(winSize.width/2,winSize.height/10), ccp(0.0f, 1.0f), VisibleRect::center()-ccp(0,winSize.height/10)*3, "评分", SUB_MENU_FONT_SIZE);
     mark->setTarget(this, menu_selector(HomeScene::__markGame));
     BaseLayer *more = __getMenuLayerItem(cc4WHITE, ccBLACK, CCSize(winSize.width/2,winSize.height/10), ccp(0.0f, 1.0f), VisibleRect::center()-ccp(0,winSize.height/10)*4, "更多游戏", SUB_MENU_FONT_SIZE);
-    more->setTarget(this, NULL);
+    more->setTarget(this, menu_selector(HomeScene::__markGame));
     return true;
 }
 

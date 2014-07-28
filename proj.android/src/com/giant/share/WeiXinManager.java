@@ -54,6 +54,7 @@ public class WeiXinManager {
 
 				WXMediaMessage msg = new WXMediaMessage();
 				msg.mediaObject = imgObj;
+				msg.description = "Helloasdf;ljasfkjas;dfj";
 
 				Bitmap bmp = BitmapFactory.decodeFile(path);
 				Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 320, 480, true);
